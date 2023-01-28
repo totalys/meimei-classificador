@@ -3,42 +3,50 @@
         "A": {
             "name": "Digitação",
             "approved": 24,
-            "wait": 5
+            "wait": 5,
+            "days": [6,7]
         },
         "B": {
             "name": "Iniciação Profissional",
             "approved": 80,
-            "wait": 0
+            "wait": 0,
+            "days": [6]
         },
         "C": {
             "name": "Auxiliar administrativo",
             "approved": 26,
-            "wait": 0
+            "wait": 0,
+            "days": [6]
         },
         "D": {
             "name": "Informática sábado",
             "approved": 30,
-            "wait": 10
+            "wait": 10,
+            "days": [6]
         },
         "E": {
             "name": "Inglês",
             "approved": 35,
-            "wait": 6
+            "wait": 6,
+            "days": [6]
         },
         "F": {
             "name": "Elétrica",
             "approved": 22,
-            "wait": 5
+            "wait": 5,
+            "days": [7]
         },
         "G": {
             "name": "Montagem de micro",
             "approved": 16,
-            "wait": 5
+            "wait": 5,
+            "days": [7]
         },
         "H": {
             "name": "Ajustador soldador",
             "approved": 25,
-            "wait": 5
+            "wait": 5,
+            "days": [7]
         }
     }
 }
