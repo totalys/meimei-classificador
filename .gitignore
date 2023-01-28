@@ -1,0 +1,7 @@
+.vscode
+input/
+output/
+*.png
+*.jpg
+*.jpeg
+*results*

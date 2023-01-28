@@ -1,0 +1,44 @@
+{
+    "coursesConfig": {
+        "A": {
+            "name": "Digitação",
+            "approved": 24,
+            "wait": 5
+        },
+        "B": {
+            "name": "Iniciação Profissional",
+            "approved": 80,
+            "wait": 0
+        },
+        "C": {
+            "name": "Auxiliar administrativo",
+            "approved": 26,
+            "wait": 0
+        },
+        "D": {
+            "name": "Informática sábado",
+            "approved": 30,
+            "wait": 10
+        },
+        "E": {
+            "name": "Inglês",
+            "approved": 35,
+            "wait": 6
+        },
+        "F": {
+            "name": "Elétrica",
+            "approved": 22,
+            "wait": 5
+        },
+        "G": {
+            "name": "Montagem de micro",
+            "approved": 16,
+            "wait": 5
+        },
+        "H": {
+            "name": "Ajustador soldador",
+            "approved": 25,
+            "wait": 5
+        }
+    }
+}
