@@ -1,52 +1,61 @@
 {
+    "data": "SEM1 DE 2023",
     "coursesConfig": {
         "A": {
             "name": "Digitação",
             "approved": 24,
             "wait": 5,
-            "days": [6,7]
+            "days": [6,7],
+            "sala": "D05"
         },
         "B": {
             "name": "Iniciação Profissional",
             "approved": 80,
             "wait": 0,
-            "days": [6]
+            "days": [6],
+            "sala": "C13,D4,D7"
         },
         "C": {
             "name": "Auxiliar administrativo",
             "approved": 26,
             "wait": 0,
-            "days": [6]
+            "days": [6],
+            "sala": "D10"
         },
         "D": {
             "name": "Informática sábado",
             "approved": 30,
             "wait": 10,
-            "days": [6]
+            "days": [6],
+            "sala": "D08"
         },
         "E": {
             "name": "Inglês",
             "approved": 35,
             "wait": 6,
-            "days": [6]
+            "days": [6],
+            "sala": "B04,B05"
         },
         "F": {
             "name": "Elétrica",
             "approved": 22,
             "wait": 5,
-            "days": [7]
+            "days": [7],
+            "sala": "D09"
         },
         "G": {
             "name": "Montagem de micro",
             "approved": 16,
             "wait": 5,
-            "days": [7]
+            "days": [7],
+            "sala": "D03"
         },
         "H": {
             "name": "Ajustador soldador",
             "approved": 25,
             "wait": 5,
-            "days": [7]
+            "days": [7],
+            "sala": "C02"
         }
     }
 }

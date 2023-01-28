@@ -43,3 +43,17 @@ Arquivo: `input.json`
 
 ```
 
+## Preparação para execução
+
+* Criar a pasta input, inserir o input.json com a lista de alunos conforme o padrão acima. 
+* Criar a pasta output
+
+* Adicionar o logo com o nome logo.jpg na pasta `C:\Users\<user_name>\AppData\Local\Temp` pois quando o  `wkhtmltopdf` executa, ele procura o logo nesta pasta.
+
+* Instalar o [wkhtmltopdf](https://wkhtmltopdf.org/)
+
+## Resultados
+
+Na pasta output será gerado 3 arquivos para cada curso.
+
+lista_curso.html, lista_curso.log e lista_curso.pdf

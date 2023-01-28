@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"bytes"
 	"encoding/json"
 	"fmt"
@@ -9,11 +8,10 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"os/exec"
 	"sort"
 	"strconv"
 	"strings"
-
-	"github.com/SebastiaanKlippert/go-wkhtmltopdf"
 )
 
 type Nota struct {
@@ -41,6 +39,8 @@ type Nota struct {
 }
 
 type CoursesConfigMap struct {
+	DataInicio    string `json:"dataInicio"`
+	Data          string `json:"data"`
 	CoursesConfig map[string]CourseConfig
 }
 
@@ -49,6 +49,7 @@ type CourseConfig struct {
 	Approved int    `json:"approved"`
 	Waitlist int    `json:"wait"`
 	Days     []int  `json:"days"`
+	Sala     string `json:"sala"`
 }
 
 type Student struct {
@@ -296,16 +297,20 @@ func main() {
 	}
 
 	for course, classified := range classifiedStudents {
-		fmt.Printf("\nCurso: %s\n\n", courseConfigs[course].Name)
-
-		createReport(classified.ApprovedStudents,
-			classified.WaitlistStudents, courseConfigs[course].Name)
+		createReport(
+			classified.ApprovedStudents,
+			classified.WaitlistStudents,
+			courseConfigs[course].Name,
+			courseConfigsMap.Data,
+			courseConfigsMap.DataInicio,
+			courseConfigs[course].Sala)
 	}
 }
 
-func createReport(approvedStudents, waitlist []Student, course string) {
+func createReport(approvedStudents, waitlist []Student, course, data, dataInicio, sala string) {
+
 	// Parse the template with the data for approved students and waitlist
-	tmpl, err := template.New("test").Parse(html)
+	tmpl, err := template.ParseFiles("template.html")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -314,62 +319,33 @@ func createReport(approvedStudents, waitlist []Student, course string) {
 		ApprovedStudents []Student
 		Waitlist         []Student
 		Course           string
+		Data             string
+		DataInicio       string
+		Sala             string
 	}{ApprovedStudents: approvedStudents,
-		Waitlist: waitlist,
-		Course:   course}); err != nil {
+		Waitlist:   waitlist,
+		Course:     strings.ToUpper(course),
+		Data:       data,
+		DataInicio: dataInicio,
+		Sala:       sala}); err != nil {
 		log.Fatal(err)
 	}
 
 	// Convert the HTML to PDF using wkhtmltopdf
-
-	// cmd := exec.Command("wkhtmltopdf.exe", "-", fmt.Sprintf("../output/lista_%s.pdf", course))
-	// cmd.Stdin = bytes.NewReader(tpl.Bytes())
-	// out, err := cmd.CombinedOutput()
-	// if err != nil {
-	// 	log.Println(err)
-	// }
-	// ioutil.WriteFile(fmt.Sprintf("../output/lista_%s.log", course), out, 0644)
+	cmd := exec.Command("wkhtmltopdf.exe",
+		"--enable-local-file-access",
+		"--encoding",
+		"utf-8",
+		"-", fmt.Sprintf("../output/lista_%s.pdf", course))
+	cmd.Stdin = bytes.NewReader(tpl.Bytes())
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		log.Println(err)
+	}
+	ioutil.WriteFile(fmt.Sprintf("../output/lista_%s.log", course), out, 0644)
 
 	if err := ioutil.WriteFile(fmt.Sprintf("../output/lista_%s.html", course), tpl.Bytes(), 0644); err != nil {
 		panic(err)
-	}
-
-	toPdf(fmt.Sprintf("../output/lista_%s.html", course), fmt.Sprintf("../output/lista_%s.pdf", course), course)
-}
-
-func toPdf(htmlFileName, pdfFileName, course string) {
-
-	file, err := os.Open(htmlFileName)
-	if err != nil {
-		panic(err)
-	}
-	reader := bufio.NewReader(file)
-	pdfg, err := wkhtmltopdf.NewPDFGenerator()
-	if err != nil {
-		panic(err)
-	}
-
-	// pageOptions := wkhtmltopdf.NewPageOptions()
-	// pageOptions.EnableLocalFileAccess.Set(true)
-	// pageOptions.NoImages.Set(true)
-	// pageOptions.Encoding.Set("utf-8")
-
-	page := wkhtmltopdf.NewPageReader(reader)
-	page.EnableLocalFileAccess.Set(true)
-	page.NoImages.Set(false)
-	page.Encoding.Set("utf-8")
-	page.LoadMediaErrorHandling.Set("ignore")
-
-	pdfg.AddPage(page)
-	pdfg.Create()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Write buffer contents to file on disk
-	err = pdfg.WriteFile(pdfFileName)
-	if err != nil {
-		log.Fatal(err)
 	}
 
 }

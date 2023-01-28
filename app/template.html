@@ -1,23 +1,32 @@
-package main
-
-const html = `
-    <html>
+<html>
     <head>
         <style>
             table {
                 border-collapse: collapse;
-                margin: 0 auto;
+                margin: 5 auto;
             }
             th, td {
-                border: 1px solid black;
+                border: 0px solid white;
                 padding: 5px;
+                margin: 1 auto;
+                align-items: center;
+                font-size: 14pt;
             }
+            .content {
+                border: 1px solid black;
+                margin: 10 auto;
+                padding: 10 auto;
+            }
+
         </style>
     </head>
     <body>
+        <div class="content">
         <img src="logo.jpg" alt="logo" style="width: 200px;">
         <div style="text-align: center;">
-            <h1>Lista de aprovados. Curso: {{.Course}}</h1>
+            <h1>LISTA DE APROVADOS/ SUPLENTES-{{.Data}}</h1>
+            <h1>CURSO {{.Course}}</h1>
+            <h2>INICIO {{.DataInicio}} ÀS 08:30H - SALA {{.Sala}}</h2>
         </div>
        
         <table>
@@ -28,10 +37,12 @@ const html = `
             {{range .ApprovedStudents}}
             <tr>
                 <td>{{.Name}}</td>
-                <td>{{.Age}}</td>
+                <td style="text-align: center;">{{.Age}}</td>
             </tr>
             {{end}}
         </table>
+        {{if len .Waitlist}}
+        <div style='break-after: always'></div>
         <div style="text-align: center;">
             <h1>Lista de Espera. Curso: {{.Course}}</h1>
         </div>
@@ -43,9 +54,11 @@ const html = `
             {{range .Waitlist}}
             <tr>
                 <td>{{.Name}}</td>
-                <td>{{.Age}}</td>
+                <td style="text-align: center;">{{.Age}}</td>
             </tr>
             {{end}}
         </table>
+        {{end}}
+    </div>
     </body>
-    </html>`
+    </html>
