@@ -39,17 +39,17 @@ type Nota struct {
 }
 
 type CoursesConfigMap struct {
-	DataInicio    string `json:"dataInicio"`
 	Data          string `json:"data"`
 	CoursesConfig map[string]CourseConfig
 }
 
 type CourseConfig struct {
-	Name     string `json:"name"`
-	Approved int    `json:"approved"`
-	Waitlist int    `json:"wait"`
-	Days     []int  `json:"days"`
-	Sala     string `json:"sala"`
+	Name       string `json:"name"`
+	Approved   int    `json:"approved"`
+	Waitlist   int    `json:"wait"`
+	Days       []int  `json:"days"`
+	Sala       string `json:"sala"`
+	DataInicio string `json:"dataInicio"`
 }
 
 type Student struct {
@@ -302,7 +302,7 @@ func main() {
 			classified.WaitlistStudents,
 			courseConfigs[course].Name,
 			courseConfigsMap.Data,
-			courseConfigsMap.DataInicio,
+			courseConfigs[course].DataInicio,
 			courseConfigs[course].Sala)
 	}
 }

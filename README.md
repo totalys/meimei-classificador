@@ -57,3 +57,9 @@ Arquivo: `input.json`
 Na pasta output será gerado 3 arquivos para cada curso.
 
 lista_curso.html, lista_curso.log e lista_curso.pdf
+
+## Para rodar o classificador
+
+$ `cd app`<br>
+
+$ `go run classificador.go`

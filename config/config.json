@@ -6,56 +6,64 @@
             "approved": 24,
             "wait": 5,
             "days": [6,7],
-            "sala": "D05"
+            "sala": "D05",
+            "dataInicio": "04/FEV (SÁBADO)"
         },
         "B": {
             "name": "Iniciação Profissional",
             "approved": 80,
             "wait": 0,
             "days": [6],
-            "sala": "C13,D4,D7"
+            "sala": "C13,D4,D7",
+            "dataInicio": "04/FEV (SÁBADO)"
         },
         "C": {
             "name": "Auxiliar administrativo",
             "approved": 26,
             "wait": 0,
             "days": [6],
-            "sala": "D10"
+            "sala": "D10",
+            "dataInicio": "04/FEV (SÁBADO)"
         },
         "D": {
             "name": "Informática sábado",
             "approved": 30,
             "wait": 10,
             "days": [6],
-            "sala": "D08"
+            "sala": "D08",
+            "dataInicio": "04/FEV (SÁBADO)"
         },
         "E": {
             "name": "Inglês",
             "approved": 35,
             "wait": 6,
             "days": [6],
-            "sala": "B04,B05"
+            "sala": "B04,B05",
+            "dataInicio": "04/FEV (SÁBADO)"
         },
         "F": {
             "name": "Elétrica",
             "approved": 22,
             "wait": 5,
             "days": [7],
-            "sala": "D09"
+            "sala": "D09",
+            "dataInicio": "05/FEV (DOMINGO)"
         },
         "G": {
             "name": "Montagem de micro",
             "approved": 16,
             "wait": 5,
             "days": [7],
-            "sala": "D03"
+            "sala": "D03",
+            "dataInicio": "05/FEV (DOMINGO)"
         },
         "H": {
             "name": "Ajustador soldador",
             "approved": 25,
             "wait": 5,
             "days": [7],
-            "sala": "C02"
+            "sala": "C02",
+            "dataInicio": "05/FEV (DOMINGO)"
         }
     }
 }
