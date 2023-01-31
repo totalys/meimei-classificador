@@ -62,6 +62,14 @@ type Student struct {
 	Phone      string   `json:"celular"`
 }
 
+func (s Student) GetChoicesNames(choiceMap map[string]CourseConfig) (choiceNames []string) {
+
+	for _, c := range s.Choices {
+		choiceNames = append(choiceNames, fmt.Sprintf("%s[%s]", choiceMap[c].Name, c))
+	}
+	return choiceNames
+}
+
 type ClassifiedStudents struct {
 	ApprovedStudents []Student `json:"approved_students"`
 	WaitlistStudents []Student `json:"waitlist_students"`
@@ -268,8 +276,9 @@ func main() {
 	sb.WriteString("Alunos não classificados \n\n")
 	for _, student := range students {
 		if student.Approved == "" && !student.Waitlisted {
-			fmt.Printf("%s \t %s \t %s \t cursos:%+v\n", student.Name, student.Age, student.Phone, student.Choices)
-			sb.WriteString(fmt.Sprintf("%s \t %s \t %s \t %s \t cursos:%+v\n", student.Name, student.Age, student.Phone, fmt.Sprintf("%.2f", student.Grade), student.Choices))
+			choiceNames := student.GetChoicesNames(courseConfigs)
+			fmt.Printf("%s \t %s \t %s \t cursos:%+v\n", student.Name, student.Age, student.Phone, choiceNames)
+			sb.WriteString(fmt.Sprintf("%s \t %s \t %s \t %s \t cursos:%+v\n", student.Name, student.Age, student.Phone, fmt.Sprintf("%.2f", student.Grade), choiceNames))
 		}
 	}
 
