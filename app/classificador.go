@@ -314,6 +314,9 @@ func main() {
 			courseConfigs[course].DataInicio,
 			courseConfigs[course].Sala)
 	}
+
+	checkInconsistencies(courseConfigs, classifiedStudents)
+
 }
 
 func createReport(approvedStudents, waitlist []Student, course, data, dataInicio, sala string) {
@@ -356,7 +359,6 @@ func createReport(approvedStudents, waitlist []Student, course, data, dataInicio
 	if err := ioutil.WriteFile(fmt.Sprintf("../output/lista_%s.html", course), tpl.Bytes(), 0644); err != nil {
 		panic(err)
 	}
-
 }
 
 func canBeApproved(currentChoiceDays, alreadyApprovedDays []int) bool {
@@ -370,4 +372,33 @@ func canBeApproved(currentChoiceDays, alreadyApprovedDays []int) bool {
 		}
 	}
 	return !exists
+}
+
+func checkInconsistencies(courseConfigs map[string]CourseConfig, classifiedStudents map[string]*ClassifiedStudents) {
+
+	fmt.Println("Verificando possíveis inconsistências: Listando alunos classificados em mais de um curso para o mesmo dia da semana:")
+	stds := make(map[string][]int)
+	for course, c := range courseConfigs {
+		for _, s := range classifiedStudents[course].ApprovedStudents {
+			for _, day := range c.Days {
+				stds[s.Name] = append(stds[s.Name], day)
+			}
+		}
+	}
+
+	var multiCourseSameDayStudents []Student
+	for s, c := range stds {
+		if len(c) > 1 {
+			for i := 0; i < len(c); i++ {
+				for j := i + 1; j < len(c); j++ {
+					if c[i] == c[j] {
+						multiCourseSameDayStudents = append(multiCourseSameDayStudents, Student{Name: s})
+						break
+					}
+				}
+			}
+		}
+	}
+
+	fmt.Println("Students with more than one course on the same day:", multiCourseSameDayStudents)
 }
