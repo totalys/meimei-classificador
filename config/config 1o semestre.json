@@ -1,3 +1,10 @@
+// INFORMÁTICA - 30 / 10 ok
+// AJUSTADOR - 25 / 10   ok
+// ELÉTRICA - 22 / 5    ok
+// DIGITAÇÃO - 25 / 10  ok
+// INIC PROF 60 / 10    ok
+// AUX ADM 20 / 5       ok
+
 {
     "data": "SEM1 DE 2023",
     "coursesConfig": {
@@ -7,55 +14,63 @@
             "wait": 10,
             "days": [6,7],
             "sala": "D05",
-            "dataInicio": "05/AGO (SÁBADO)"
+            "dataInicio": "04/FEV (SÁBADO)"
         },
-        "205 - Iniciação Profissional - LM": {
+        "B": {
             "name": "Iniciação Profissional",
             "approved": 60,
             "wait": 10,
             "days": [6],
             "sala": "C13,D4,D7",
-            "dataInicio": "05/AGO (SÁBADO)"
+            "dataInicio": "04/FEV (SÁBADO)"
         },
-        "210 - Auxiliar Administrativo - LM": {
+        "C": {
             "name": "Auxiliar administrativo",
             "approved": 20,
             "wait": 5,
             "days": [6],
             "sala": "D10",
-            "dataInicio": "05/AGO (SÁBADO)"
+            "dataInicio": "04/FEV (SÁBADO)"
         },
-        "220 - Informática Básica - LM": {
+        "D": {
             "name": "Informática domingo",
             "approved": 30,
             "wait": 10,
-            "days": [7],
+            "days": [6],
             "sala": "D08",
-            "dataInicio": "05/AGO (SÁBADO)"
+            "dataInicio": "04/FEV (SÁBADO)"
         },
-        "235 - Auxiliar Eletricista - LM": {
+        "E": {
+            "name": "Inglês",
+            "approved": 35,
+            "wait": 6,
+            "days": [6],
+            "sala": "B04,B05",
+            "dataInicio": "04/FEV (SÁBADO)"
+        },
+        "F": {
             "name": "Elétrica",
             "approved": 22,
             "wait": 5,
             "days": [7],
             "sala": "D09",
-            "dataInicio": "06/AGO (DOMINGO)"
+            "dataInicio": "05/FEV (DOMINGO)"
         },
-        "230 - Ajustador Soldador - LM": {
+        "G": {
+            "name": "Montagem de micro",
+            "approved": 16,
+            "wait": 5,
+            "days": [7],
+            "sala": "D03",
+            "dataInicio": "05/FEV (DOMINGO)"
+        },
+        "H": {
             "name": "Ajustador soldador",
             "approved": 25,
             "wait": 10,
             "days": [7],
             "sala": "C02",
-            "dataInicio": "06/AGO (DOMINGO)"
-        },
-        "245 - Climatização - LM": {
-            "name": "Climatização",
-            "approved": 20,
-            "wait": 5,
-            "days": [7],
-            "sala": "____",
-            "dataInicio": "___/AGO (_________)"
+            "dataInicio": "05/FEV (DOMINGO)"
         }
     }
 }

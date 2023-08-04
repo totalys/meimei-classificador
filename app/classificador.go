@@ -5,37 +5,44 @@ import (
 	"encoding/json"
 	"fmt"
 	"html/template"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
 	"sort"
 	"strconv"
 	"strings"
+
+	"github.com/360EntSecGroup-Skylar/excelize"
+)
+
+const (
+	baseUrl string = "https://larmeimei.org/api/resource/Student%20Applicant"
 )
 
 type Nota struct {
-	Nome          string `json:"NOME,omitempty"`
-	Celular       string `json:"CELULAR,omitempty"`
-	Idade         string `json:"IDADE,omitempty"`
-	Sabado1a      string `json:"1ª OPCAO S,omitempty"`
-	Sabado2a      string `json:"2ª OPCAO S,omitempty"`
-	Domingo1a     string `json:"1ª OPCAO D,omitempty"`
-	Domingo2a     string `json:"2ª OPCAO D,omitempty"`
-	Matematica    string `json:"MATEMATICA (0 - 10),omitempty"`
-	Portugues     string `json:"PORTUGUES (0 - 10),omitempty"`
-	Logica        string `json:"LOGICA (0 - 5),omitempty"`
-	Redacao       string `json:"REDACAO (0 - 10),omitempty"`
-	EntDigitacaoA string `json:"DIGITACAO A,omitempty"`
-	EntInicProfB  string `json:"INIC PROF B,omitempty"`
-	EntAUXADMC    string `json:"AUX ADM C,omitempty"`
-	EntInfoSabD   string `json:"INFOR SAB D,omitempty"`
-	EntInglesE    string `json:"INGLES E,omitempty"`
-	EntEletricaF  string `json:"ELETRICA F,omitempty"`
-	EntMontMicroG string `json:"MONT MICRO G,omitempty"`
-	EntAjustadorH string `json:"AJUSTADOR H,omitempty"`
-	NotaProva     string `json:"NOTA PROVA,omitempty"`
-	NotaFinal     string `json:"NOTA UNICA,omitempty"`
+	Nome         string `json:"NOME,omitempty"`
+	Celular      string `json:"CELULAR,omitempty"`
+	Idade        string `json:"IDADE,omitempty"`
+	Sabado1a     string `json:"1ª OPCAO S,omitempty"`
+	Sabado2a     string `json:"2ª OPCAO S,omitempty"`
+	Domingo1a    string `json:"1ª OPCAO D,omitempty"`
+	Domingo2a    string `json:"2ª OPCAO D,omitempty"`
+	Matematica   string `json:"MATEMATICA (0 - 10),omitempty"`
+	Portugues    string `json:"PORTUGUES (0 - 10),omitempty"`
+	Logica       string `json:"LOGICA (0 - 5),omitempty"`
+	Redacao      string `json:"REDACAO (0 - 10),omitempty"`
+	EntDigitacao string `json:"DIGITACAO,omitempty"`
+	EntInicProf  string `json:"INIC PROF,omitempty"`
+	EntAuxAdm    string `json:"AUX ADM,omitempty"`
+	EntInfoSab   string `json:"INFOR SAB,omitempty"`
+	EntInfoDom   string `json:"INFOR DOM,omitempty"`
+	EntIngles    string `json:"INGLES,omitempty"`
+	EntEletrica  string `json:"ELETRICA,omitempty"`
+	EntMontMicro string `json:"MONT MICRO,omitempty"`
+	EntAjustador string `json:"AJUSTADOR,omitempty"`
+	EntClimat    string `json:"CLIMATIZADOR,omitempty"`
+	NotaProva    string `json:"NOTA PROVA,omitempty"`
+	NotaFinal    string `json:"NOTA UNICA,omitempty"`
 }
 
 type CoursesConfigMap struct {
@@ -83,10 +90,10 @@ func checkErr(err error) {
 
 func copy(src string, dst string) {
 	// Read all content of src to data, may cause OOM for a large file.
-	data, err := ioutil.ReadFile(src)
+	data, err := os.ReadFile(src)
 	checkErr(err)
 	// Write data to dst
-	err = ioutil.WriteFile(dst, data, 0644)
+	err = os.WriteFile(dst, data, 0644)
 	checkErr(err)
 }
 
@@ -99,7 +106,7 @@ func main() {
 	folderPath := "../output"
 	err = os.Mkdir(folderPath, os.ModePerm)
 	if err != nil {
-		// handle error
+		panic(err)
 	}
 	copy("../resources/logo.jpg", "../output/logo.jpg")
 
@@ -109,10 +116,16 @@ func main() {
 		return
 	}
 	defer file.Close()
-	decoder := json.NewDecoder(file)
 
-	notas := []Nota{}
-	err = decoder.Decode(&notas)
+	//decoder := json.NewDecoder(file)
+	// notas := []Nota{}
+	// err = decoder.Decode(&notas)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	return
+	// }
+
+	notas, err := GetNotas(baseUrl)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -139,7 +152,7 @@ func main() {
 
 	students := []*Student{}
 
-	for _, nota := range notas {
+	for _, nota := range *notas {
 		var choices []string
 
 		if nota.Sabado1a != "" {
@@ -247,9 +260,9 @@ func main() {
 
 	for course, classified := range classifiedStudents {
 		fmt.Printf("Curso: %s\n\n", courseConfigs[course].Name)
-		fmt.Println("Nome \t Idade \t Contato \t Nota final")
+		fmt.Println("Nome \t Idade \t Contato \t Nota final \t link whatsapp")
 		sb.WriteString(fmt.Sprintf("Curso: %s\n\n", courseConfigs[course].Name))
-		sb.WriteString("Nome \t Idade \t Contato \t Nota final\n")
+		sb.WriteString("Nome \t Idade \t Contato \t Nota final \t link whatsapp\n")
 
 		// sort students by name
 		classifieds := classified.ApprovedStudents
@@ -259,17 +272,21 @@ func main() {
 
 		for _, student := range classifieds {
 			fmt.Printf("%s \t %s \t %s\n", student.Name, student.Age, student.Phone)
-			sb.WriteString(fmt.Sprintf("%s \t %s \t %s \t %s\n", student.Name, student.Age, student.Phone, fmt.Sprintf("%.2f", student.Grade)))
-
+			sb.WriteString(fmt.Sprintf("%s\t%s\t%s\t%s\t%s\n",
+				student.Name, student.Age, student.Phone, fmt.Sprintf("%.2f", student.Grade), fmt.Sprintf("http://wa.me/55%s", student.Phone)))
 		}
+
 		fmt.Println("Lista de espera:")
-		sb.WriteString("Lista de espera:\n")
+		sb.WriteString("\nLista de espera:\n")
 		for _, student := range classified.WaitlistStudents {
 			fmt.Printf("%s \t %s \t %s\n", student.Name, student.Age, student.Phone)
-			sb.WriteString(fmt.Sprintf("%s \t %s \t %s \t %s\n", student.Name, student.Age, student.Phone, fmt.Sprintf("%.2f", student.Grade)))
-
+			sb.WriteString(fmt.Sprintf("%s\t%s\t%s\t%s\t%s\n",
+				student.Name, student.Age, student.Phone, fmt.Sprintf("%.2f", student.Grade), fmt.Sprintf("http://wa.me/55%s", student.Phone)))
 		}
 		sb.WriteString("\n\n")
+
+		go writeExcelFile(courseConfigs[course].Name, sb.String())
+		sb.Reset()
 	}
 
 	fmt.Printf("\n\nAlunos não classificados: \n\n")
@@ -283,7 +300,7 @@ func main() {
 	}
 
 	aprovados := "../output/aprovados.csv"
-	err = ioutil.WriteFile(aprovados, []byte(sb.String()), 0644)
+	err = os.WriteFile(aprovados, []byte(sb.String()), 0644)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -354,9 +371,9 @@ func createReport(approvedStudents, waitlist []Student, course, data, dataInicio
 	if err != nil {
 		log.Println(err)
 	}
-	ioutil.WriteFile(fmt.Sprintf("../output/lista_%s.log", course), out, 0644)
+	os.WriteFile(fmt.Sprintf("../output/lista_%s.log", course), out, 0644)
 
-	if err := ioutil.WriteFile(fmt.Sprintf("../output/lista_%s.html", course), tpl.Bytes(), 0644); err != nil {
+	if err := os.WriteFile(fmt.Sprintf("../output/lista_%s.html", course), tpl.Bytes(), 0644); err != nil {
 		panic(err)
 	}
 }
@@ -380,9 +397,7 @@ func checkInconsistencies(courseConfigs map[string]CourseConfig, classifiedStude
 	stds := make(map[string][]int)
 	for course, c := range courseConfigs {
 		for _, s := range classifiedStudents[course].ApprovedStudents {
-			for _, day := range c.Days {
-				stds[s.Name] = append(stds[s.Name], day)
-			}
+			stds[s.Name] = append(stds[s.Name], c.Days...)
 		}
 	}
 
@@ -401,4 +416,48 @@ func checkInconsistencies(courseConfigs map[string]CourseConfig, classifiedStude
 	}
 
 	fmt.Println("Students with more than one course on the same day:", multiCourseSameDayStudents)
+}
+
+func writeExcelFile(curso, content string) {
+
+	// Create a new Excel file
+	file := excelize.NewFile()
+	lines := strings.Split(content, "\n")
+
+	sheetName := curso
+	file.NewSheet(sheetName)
+	file.SetColWidth(sheetName, "B", "B", 60)
+	file.SetColWidth(sheetName, "C", "C", 10)
+	file.SetColWidth(sheetName, "D", "D", 15)
+	file.SetColWidth(sheetName, "E", "E", 10)
+	file.SetColWidth(sheetName, "F", "F", 30)
+	for rowIdx, line := range lines {
+		colls := strings.Split(line, "\t")
+
+		for collIdx, c := range colls {
+			cell := excelize.ToAlphaString(collIdx+1) + fmt.Sprintf("%d", rowIdx+1)
+			file.SetCellValue(sheetName, cell, c)
+
+		}
+
+		// creates the whatsapp link
+		if len(colls) > 4 {
+			url := fmt.Sprintf("http://wa.me/55%s", colls[len(colls)-1])
+			cell := excelize.ToAlphaString(len(colls)) + fmt.Sprintf("%d", rowIdx+1)
+			file.SetCellHyperLink(sheetName, cell, url, "External")
+
+			style, _ := file.NewStyle(`{"font":{"color":"#1265BE","underline":"single"}}`)
+			file.SetCellStyle("Sheet1", cell, cell, style)
+		}
+	}
+
+	file.DeleteSheet("Sheet1")
+
+	outputFileName := fmt.Sprintf("../output/excel_aprovados_%s.xlsx", curso)
+	if err := file.SaveAs(outputFileName); err != nil {
+		log.Println("error saving excel file", err)
+	}
+
+	fmt.Printf("Excel file saved as %s\n", outputFileName)
+
 }
