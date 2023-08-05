@@ -442,15 +442,16 @@ func writeExcelFile(curso, content string) {
 
 		// creates the whatsapp link
 		if len(colls) > 4 {
-			url := fmt.Sprintf("http://wa.me/55%s", colls[len(colls)-1])
+			url := colls[len(colls)-1]
 			cell := excelize.ToAlphaString(len(colls)) + fmt.Sprintf("%d", rowIdx+1)
 			file.SetCellHyperLink(sheetName, cell, url, "External")
 
 			style, _ := file.NewStyle(`{"font":{"color":"#1265BE","underline":"single"}}`)
-			file.SetCellStyle("Sheet1", cell, cell, style)
+			file.SetCellStyle(sheetName, cell, cell, style)
 		}
 	}
 
+	// delete default folder created and not used.
 	file.DeleteSheet("Sheet1")
 
 	outputFileName := fmt.Sprintf("../output/excel_aprovados_%s.xlsx", curso)

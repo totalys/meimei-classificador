@@ -1,48 +1,35 @@
 # meimei-classificador
 Este projeto classifica os alunos nos cursos do Lar Meimei conforme suas notas. Neste repo todos os exemplos de notas são fictícios.
 
-# chatGPT
+## chatGPT
 Este projeto foi feito com ajuda do chatGPT
 
-# Exemplo de dados de entrada
+## Exemplo de dados de entrada
 
-Arquivo: `input.json`
+Vide domain.go Struct: Applicant
+Os dados extraídos do ErpNext.
 
-``` json
+### Api do ErpNext
 
-[
-    {
-        "NOME": "NOME DO ALUNO",
-        "CELULAR": "11 9999-9999",
-        "IDADE": "19",
-        "Coluna1": "",
-        "1ª OPCAO S": "E",
-        "2ª OPCAO S": "D",
-        "1ª OPCAO D": "",
-        "2ª OPCAO D": "",
-        "Coluna2": "",
-        "MATEMATICA\n(0 - 10)": "4,0",
-        "PORTUGUES\n(0 - 10)": "6,0",
-        "LOGICA\n(0 - 5)": "1,0",
-        "REDACAO\n(0 - 10)": "8,0",
-        "Coluna3": "",
-        "DIGITACAO A": "",
-        "INIC PROF B": "",
-        "AUX ADM C": "",
-        "INFOR SAB D": "8,5",
-        "INGLES E": "6,9",
-        "ELETRICA F": "",
-        "MONT MICRO G": "",
-        "AJUSTADOR H": "",
-        "Coluna4": "",
-        "NOTA PROVA": "5,4",
-        "NOTA UNICA": "6,9"
-    },
-    ...
-]
+url: https://larmeimei.org/api/resource/Student%20Applicant
 
-```
+domínio lar Meimei: larmeimei.org
+doc_type: Student Applicant => urlEncoded: Student%20Applicant
 
+**Headers**
+
+"Content-Type": "application/json"
+"Authorization", your_api_key
+
+**Query params**
+
+* Controle de paginação
+
+    * "limit_start": "0"
+    * "limit_page_length": "200"
+* Campos a serem extraídos
+    * "fields": [todos os campos do documento separados por vírgula]
+ 
 ## Preparação para execução
 
 * Criar a pasta input, inserir o input.json com a lista de alunos conforme o padrão acima. 
@@ -54,12 +41,22 @@ Arquivo: `input.json`
 
 ## Resultados
 
-Na pasta output será gerado 3 arquivos para cada curso.
+Na pasta output será gerado 4 arquivos para cada curso.
 
-lista_curso.html, lista_curso.log e lista_curso.pdf
+lista_curso.html, lista_curso.log, lista_curso.pdf e excel_aprovados.xlsx com o contato e link para whatsapp para facilitar a criação das listas.
 
 ## Para rodar o classificador
 
 $ `cd app`<br>
 
 $ `go run classificador.go`
+
+## Para buildar e criar um executável
+
+$ `go build -o meimei_classificador.exe classificador.go`
+
+A pasta /output será toda deletada e os arquivos serão gerados conforme as regras de input (extrator do erpNext) e configuration.json
+
+## Envs
+
+ENV LARMEIMEI_TIAGO_API_KEY: api key and secret. ex: bearer [api_key]:[api_secret] criada na área de segurança do perfil de usuário do ErpNext
