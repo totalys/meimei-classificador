@@ -168,13 +168,14 @@ func main() {
 			choices = append(choices, nota.Domingo2a)
 		}
 		if len(choices) == 0 {
-			continue
+			log.Printf("Error: Candidata(o):%s sem nenhum curso selecionado! Insira o curso escolhido e tente novamente", nota.Nome)
+			os.Exit(1)
 		}
 
 		notaFinal, err := strconv.ParseFloat(strings.Replace(nota.NotaFinal, ",", ".", 1), 64)
 		if err != nil {
-			fmt.Printf("failed converting NotaFinal %s from %s. err: %s\n", nota.NotaFinal, nota.Nome, err.Error())
-			continue
+			fmt.Printf("erro ao calcular a nota final. %s from %s. err: %s. O campo nota deve ser numérico\n", nota.NotaFinal, nota.Nome, err.Error())
+			os.Exit(1)
 		}
 		students = append(students, &Student{
 			Name:       nota.Nome,
@@ -257,6 +258,7 @@ func main() {
 
 	fmt.Println("Lista para coordenadores")
 	sb := strings.Builder{}
+	sbAll := strings.Builder{}
 
 	for course, classified := range classifiedStudents {
 		fmt.Printf("Curso: %s\n\n", courseConfigs[course].Name)
@@ -286,9 +288,10 @@ func main() {
 		sb.WriteString("\n\n")
 
 		go writeExcelFile(courseConfigs[course].Name, sb.String())
+		sbAll.WriteString(sb.String())
 		sb.Reset()
 	}
-
+	sb.WriteString(sbAll.String())
 	fmt.Printf("\n\nAlunos não classificados: \n\n")
 	sb.WriteString("Alunos não classificados \n\n")
 	for _, student := range students {
