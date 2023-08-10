@@ -1,4 +1,4 @@
-package main
+package extractor
 
 type Applicant struct {
 	First_name                 string  `json:"first_name"`

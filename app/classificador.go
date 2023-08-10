@@ -13,37 +13,12 @@ import (
 	"strings"
 
 	"github.com/360EntSecGroup-Skylar/excelize"
+	"github.com/totalys/meimei-classificador/extractor"
 )
 
 const (
 	baseUrl string = "https://larmeimei.org/api/resource/Student%20Applicant"
 )
-
-type Nota struct {
-	Nome         string `json:"NOME,omitempty"`
-	Celular      string `json:"CELULAR,omitempty"`
-	Idade        string `json:"IDADE,omitempty"`
-	Sabado1a     string `json:"1ª OPCAO S,omitempty"`
-	Sabado2a     string `json:"2ª OPCAO S,omitempty"`
-	Domingo1a    string `json:"1ª OPCAO D,omitempty"`
-	Domingo2a    string `json:"2ª OPCAO D,omitempty"`
-	Matematica   string `json:"MATEMATICA (0 - 10),omitempty"`
-	Portugues    string `json:"PORTUGUES (0 - 10),omitempty"`
-	Logica       string `json:"LOGICA (0 - 5),omitempty"`
-	Redacao      string `json:"REDACAO (0 - 10),omitempty"`
-	EntDigitacao string `json:"DIGITACAO,omitempty"`
-	EntInicProf  string `json:"INIC PROF,omitempty"`
-	EntAuxAdm    string `json:"AUX ADM,omitempty"`
-	EntInfoSab   string `json:"INFOR SAB,omitempty"`
-	EntInfoDom   string `json:"INFOR DOM,omitempty"`
-	EntIngles    string `json:"INGLES,omitempty"`
-	EntEletrica  string `json:"ELETRICA,omitempty"`
-	EntMontMicro string `json:"MONT MICRO,omitempty"`
-	EntAjustador string `json:"AJUSTADOR,omitempty"`
-	EntClimat    string `json:"CLIMATIZADOR,omitempty"`
-	NotaProva    string `json:"NOTA PROVA,omitempty"`
-	NotaFinal    string `json:"NOTA UNICA,omitempty"`
-}
 
 type CoursesConfigMap struct {
 	Data          string `json:"data"`
@@ -117,15 +92,7 @@ func main() {
 	}
 	defer file.Close()
 
-	//decoder := json.NewDecoder(file)
-	// notas := []Nota{}
-	// err = decoder.Decode(&notas)
-	// if err != nil {
-	// 	fmt.Println(err)
-	// 	return
-	// }
-
-	notas, err := GetNotas(baseUrl)
+	notas, err := extractor.GetNotas(baseUrl)
 	if err != nil {
 		fmt.Println(err)
 		return
