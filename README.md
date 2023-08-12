@@ -37,7 +37,11 @@ doc_type: Student Applicant => urlEncoded: Student%20Applicant
 
 ## Preparação para execução
 
-* Criar a pasta input, inserir o input.json com a lista de alunos conforme o padrão acima. 
+* Configurar as envs:
+*    LARMEIMEI_[seu_nome]_API_KEY
+*    UPDATE: 0 ou 1 para ajustar o status do aluno como aprovado no curso
+*    SEGUNDA_CHAMADA: 0 ou 1 para situações de segunda_chamada.
+
 * Criar a pasta output
 
 * Adicionar o logo com o nome logo.jpg na pasta `C:\Users\<user_name>\AppData\Local\Temp` pois quando o  `wkhtmltopdf` executa, ele procura o logo nesta pasta.
@@ -65,3 +69,4 @@ A pasta /output será toda deletada e os arquivos serão gerados conforme as reg
 ## Envs
 
 ENV LARMEIMEI_TIAGO_API_KEY: api key and secret. ex: bearer [api_key]:[api_secret] criada na área de segurança do perfil de usuário do ErpNext
+
