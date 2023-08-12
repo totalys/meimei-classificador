@@ -13,48 +13,18 @@ import (
 	"strings"
 
 	"github.com/360EntSecGroup-Skylar/excelize"
-	"github.com/totalys/meimei-classificador/extractor"
+	"github.com/totalys/meimei-classificador/pkg/domain"
+	"github.com/totalys/meimei-classificador/pkg/extractor"
+	"github.com/totalys/meimei-classificador/pkg/updater"
 )
 
 const (
 	baseUrl string = "https://larmeimei.org/api/resource/Student%20Applicant"
 )
 
-type CoursesConfigMap struct {
-	Data          string `json:"data"`
-	CoursesConfig map[string]CourseConfig
-}
-
-type CourseConfig struct {
-	Name       string `json:"name"`
-	Approved   int    `json:"approved"`
-	Waitlist   int    `json:"wait"`
-	Days       []int  `json:"days"`
-	Sala       string `json:"sala"`
-	DataInicio string `json:"dataInicio"`
-}
-
-type Student struct {
-	Name       string   `json:"name"`
-	Choices    []string `json:"choices"`
-	Grade      float64  `json:"grade"`
-	Approved   string   `json:"approved"`
-	Waitlisted bool     `json:"waitlisted"`
-	Age        string   `json:"idade"`
-	Phone      string   `json:"celular"`
-}
-
-func (s Student) GetChoicesNames(choiceMap map[string]CourseConfig) (choiceNames []string) {
-
-	for _, c := range s.Choices {
-		choiceNames = append(choiceNames, fmt.Sprintf("%s[%s]", choiceMap[c].Name, c))
-	}
-	return choiceNames
-}
-
 type ClassifiedStudents struct {
-	ApprovedStudents []Student `json:"approved_students"`
-	WaitlistStudents []Student `json:"waitlist_students"`
+	ApprovedStudents []domain.Student `json:"approved_students"`
+	WaitlistStudents []domain.Student `json:"waitlist_students"`
 }
 
 func checkErr(err error) {
@@ -108,7 +78,7 @@ func main() {
 
 	// Decode the config file into a map
 	configDecoder := json.NewDecoder(configFile)
-	var courseConfigsMap CoursesConfigMap
+	var courseConfigsMap domain.CoursesConfigMap
 	err = configDecoder.Decode(&courseConfigsMap)
 	if err != nil {
 		fmt.Println(err)
@@ -117,7 +87,7 @@ func main() {
 
 	var courseConfigs = courseConfigsMap.CoursesConfig
 
-	students := []*Student{}
+	students := []*domain.Student{}
 
 	for _, nota := range *notas {
 		var choices []string
@@ -144,14 +114,17 @@ func main() {
 			fmt.Printf("erro ao calcular a nota final. %s from %s. err: %s. O campo nota deve ser numérico\n", nota.NotaFinal, nota.Nome, err.Error())
 			os.Exit(1)
 		}
-		students = append(students, &Student{
+
+		students = append(students, &domain.Student{
 			Name:       nota.Nome,
 			Choices:    choices,
 			Grade:      notaFinal,
-			Approved:   "",
+			Approved:   []domain.Approved{},
 			Waitlisted: false,
 			Age:        nota.Idade,
 			Phone:      nota.Celular,
+			SegChamada: nota.SegChamada,
+			DocName:    nota.Name,
 		})
 	}
 
@@ -179,12 +152,10 @@ func main() {
 				if len(classifiedStudents[choice].ApprovedStudents) < courseConfigs[choice].Approved {
 					// if  contans(courseConfigs[choice].Day)
 					if canBeApproved(courseConfigs[choice].Days, days_approved) {
-						if student.Approved != "" {
-							student.Approved = fmt.Sprintf("%s|%s", student.Approved, choice)
-						} else {
-							student.Approved = choice
-						}
-
+						student.Approved = append(student.Approved, domain.Approved{
+							Course: choice,
+							Days:   courseConfigs[choice].Days,
+						})
 						classifiedStudents[choice].ApprovedStudents = append(classifiedStudents[choice].ApprovedStudents, *student)
 						days_approved = append(days_approved, courseConfigs[choice].Days...)
 					} else {
@@ -229,9 +200,9 @@ func main() {
 
 	for course, classified := range classifiedStudents {
 		fmt.Printf("Curso: %s\n\n", courseConfigs[course].Name)
-		fmt.Println("Nome \t Idade \t Contato \t Nota final \t link whatsapp")
+		fmt.Println("Nome \t Idade \t Contato \t Nota final \t link whatsapp \t 2a chamada")
 		sb.WriteString(fmt.Sprintf("Curso: %s\n\n", courseConfigs[course].Name))
-		sb.WriteString("Nome \t Idade \t Contato \t Nota final \t link whatsapp\n")
+		sb.WriteString("Nome \t Idade \t Contato \t Nota final \t link whatsapp \t 2a chamada\n")
 
 		// sort students by name
 		classifieds := classified.ApprovedStudents
@@ -241,16 +212,17 @@ func main() {
 
 		for _, student := range classifieds {
 			fmt.Printf("%s \t %s \t %s\n", student.Name, student.Age, student.Phone)
-			sb.WriteString(fmt.Sprintf("%s\t%s\t%s\t%s\t%s\n",
-				student.Name, student.Age, student.Phone, fmt.Sprintf("%.2f", student.Grade), fmt.Sprintf("http://wa.me/55%s", student.Phone)))
+			sb.WriteString(fmt.Sprintf("%s\t%s\t%s\t%s\t%s\t%d\n",
+				student.Name, student.Age, student.Phone, fmt.Sprintf("%.2f", student.Grade), fmt.Sprintf("http://wa.me/55%s", student.Phone), student.SegChamada))
 		}
 
 		fmt.Println("Lista de espera:")
 		sb.WriteString("\nLista de espera:\n")
 		for _, student := range classified.WaitlistStudents {
 			fmt.Printf("%s \t %s \t %s\n", student.Name, student.Age, student.Phone)
-			sb.WriteString(fmt.Sprintf("%s\t%s\t%s\t%s\t%s\n",
-				student.Name, student.Age, student.Phone, fmt.Sprintf("%.2f", student.Grade), fmt.Sprintf("http://wa.me/55%s", student.Phone)))
+			sb.WriteString(fmt.Sprintf("%s\t%s\t%s\t%s\t%s\t%d\n",
+				student.Name, student.Age, student.Phone, fmt.Sprintf("%.2f", student.Grade),
+				fmt.Sprintf("http://wa.me/55%s", student.Phone), student.SegChamada))
 		}
 		sb.WriteString("\n\n")
 
@@ -262,10 +234,11 @@ func main() {
 	fmt.Printf("\n\nAlunos não classificados: \n\n")
 	sb.WriteString("Alunos não classificados \n\n")
 	for _, student := range students {
-		if student.Approved == "" && !student.Waitlisted {
+		if len(student.Approved) == 0 && !student.Waitlisted {
 			choiceNames := student.GetChoicesNames(courseConfigs)
 			fmt.Printf("%s \t %s \t %s \t cursos:%+v\n", student.Name, student.Age, student.Phone, choiceNames)
-			sb.WriteString(fmt.Sprintf("%s \t %s \t %s \t %s \t cursos:%+v\n", student.Name, student.Age, student.Phone, fmt.Sprintf("%.2f", student.Grade), choiceNames))
+			sb.WriteString(fmt.Sprintf("%s \t %s \t %s \t %s \t cursos:%+v\n",
+				student.Name, student.Age, student.Phone, fmt.Sprintf("%.2f", student.Grade), choiceNames))
 		}
 	}
 
@@ -304,9 +277,16 @@ func main() {
 
 	checkInconsistencies(courseConfigs, classifiedStudents)
 
+	if os.Getenv("UPDATE") == "1" {
+		err := updater.UpdateGrades(courseConfigs, baseUrl, students)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
 }
 
-func createReport(approvedStudents, waitlist []Student, course, data, dataInicio, sala string) {
+func createReport(approvedStudents, waitlist []domain.Student, course, data, dataInicio, sala string) {
 
 	// Parse the template with the data for approved students and waitlist
 	tmpl, err := template.ParseFiles("template.html")
@@ -315,8 +295,8 @@ func createReport(approvedStudents, waitlist []Student, course, data, dataInicio
 	}
 	var tpl bytes.Buffer
 	if err := tmpl.Execute(&tpl, struct {
-		ApprovedStudents []Student
-		Waitlist         []Student
+		ApprovedStudents []domain.Student
+		Waitlist         []domain.Student
 		Course           string
 		Data             string
 		DataInicio       string
@@ -361,23 +341,28 @@ func canBeApproved(currentChoiceDays, alreadyApprovedDays []int) bool {
 	return !exists
 }
 
-func checkInconsistencies(courseConfigs map[string]CourseConfig, classifiedStudents map[string]*ClassifiedStudents) {
+func checkInconsistencies(courseConfigs map[string]domain.CourseConfig, classifiedStudents map[string]*ClassifiedStudents) {
 
 	fmt.Println("Verificando possíveis inconsistências: Listando alunos classificados em mais de um curso para o mesmo dia da semana:")
 	stds := make(map[string][]int)
 	for course, c := range courseConfigs {
-		for _, s := range classifiedStudents[course].ApprovedStudents {
+		classifieds, ok := classifiedStudents[course]
+		if !ok {
+			log.Printf("nenhum aluno classificado para o curso: %s", course)
+			continue
+		}
+		for _, s := range classifieds.ApprovedStudents {
 			stds[s.Name] = append(stds[s.Name], c.Days...)
 		}
 	}
 
-	var multiCourseSameDayStudents []Student
+	var multiCourseSameDayStudents []domain.Student
 	for s, c := range stds {
 		if len(c) > 1 {
 			for i := 0; i < len(c); i++ {
 				for j := i + 1; j < len(c); j++ {
 					if c[i] == c[j] {
-						multiCourseSameDayStudents = append(multiCourseSameDayStudents, Student{Name: s})
+						multiCourseSameDayStudents = append(multiCourseSameDayStudents, domain.Student{Name: s})
 						break
 					}
 				}
@@ -407,7 +392,6 @@ func writeExcelFile(curso, content string) {
 		for collIdx, c := range colls {
 			cell := excelize.ToAlphaString(collIdx+1) + fmt.Sprintf("%d", rowIdx+1)
 			file.SetCellValue(sheetName, cell, c)
-
 		}
 
 		// creates the whatsapp link

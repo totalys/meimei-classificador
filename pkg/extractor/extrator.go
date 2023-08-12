@@ -24,33 +24,38 @@ var (
 		"informática_básica_domingo", "digitação",
 		"210_auxiliar_administrtativo", "elétrica",
 		"iniciação_profissional", "montagem_de_micro",
-		"ajustador_soldador", "inglês", "informática_básica_sábado"}
+		"ajustador_soldador", "inglês", "informática_básica_sábado",
+		"segunda_chamada", "name"}
 )
 
 type Nota struct {
-	Nome         string `json:"NOME,omitempty"`
-	Celular      string `json:"CELULAR,omitempty"`
-	Idade        string `json:"IDADE,omitempty"`
-	Sabado1a     string `json:"1ª OPCAO S,omitempty"`
-	Sabado2a     string `json:"2ª OPCAO S,omitempty"`
-	Domingo1a    string `json:"1ª OPCAO D,omitempty"`
-	Domingo2a    string `json:"2ª OPCAO D,omitempty"`
-	Matematica   string `json:"MATEMATICA (0 - 10),omitempty"`
-	Portugues    string `json:"PORTUGUES (0 - 10),omitempty"`
-	Logica       string `json:"LOGICA (0 - 5),omitempty"`
-	Redacao      string `json:"REDACAO (0 - 10),omitempty"`
-	EntDigitacao string `json:"DIGITACAO,omitempty"`
-	EntInicProf  string `json:"INIC PROF,omitempty"`
-	EntAuxAdm    string `json:"AUX ADM,omitempty"`
-	EntInfoSab   string `json:"INFOR SAB,omitempty"`
-	EntInfoDom   string `json:"INFOR DOM,omitempty"`
-	EntIngles    string `json:"INGLES,omitempty"`
-	EntEletrica  string `json:"ELETRICA,omitempty"`
-	EntMontMicro string `json:"MONT MICRO,omitempty"`
-	EntAjustador string `json:"AJUSTADOR,omitempty"`
-	EntClimat    string `json:"CLIMATIZADOR,omitempty"`
-	NotaProva    string `json:"NOTA PROVA,omitempty"`
-	NotaFinal    string `json:"NOTA UNICA,omitempty"`
+	Nome            string `json:"NOME,omitempty"`
+	Celular         string `json:"CELULAR,omitempty"`
+	Idade           string `json:"IDADE,omitempty"`
+	Sabado1a        string `json:"1ª OPCAO S,omitempty"`
+	Sabado2a        string `json:"2ª OPCAO S,omitempty"`
+	Domingo1a       string `json:"1ª OPCAO D,omitempty"`
+	Domingo2a       string `json:"2ª OPCAO D,omitempty"`
+	Matematica      string `json:"MATEMATICA (0 - 10),omitempty"`
+	Portugues       string `json:"PORTUGUES (0 - 10),omitempty"`
+	Logica          string `json:"LOGICA (0 - 5),omitempty"`
+	Redacao         string `json:"REDACAO (0 - 10),omitempty"`
+	EntDigitacao    string `json:"DIGITACAO,omitempty"`
+	EntInicProf     string `json:"INIC PROF,omitempty"`
+	EntAuxAdm       string `json:"AUX ADM,omitempty"`
+	EntInfoSab      string `json:"INFOR SAB,omitempty"`
+	EntInfoDom      string `json:"INFOR DOM,omitempty"`
+	EntIngles       string `json:"INGLES,omitempty"`
+	EntEletrica     string `json:"ELETRICA,omitempty"`
+	EntMontMicro    string `json:"MONT MICRO,omitempty"`
+	EntAjustador    string `json:"AJUSTADOR,omitempty"`
+	EntClimat       string `json:"CLIMATIZADOR,omitempty"`
+	NotaProva       string `json:"NOTA PROVA,omitempty"`
+	NotaFinal       string `json:"NOTA UNICA,omitempty"`
+	SegChamada      int32  `json:"segunda_chamada,omitempty"`
+	CursoApvSabado  string `json:"Curso_Aprovado,omitempty"`
+	CursoApvDomingo string `json:"curso_aprovado_domingo,omitempty"`
+	Name            string `json:"name"`
 }
 
 func GetNotas(baseUrl string) (*[]Nota, error) {
@@ -59,6 +64,11 @@ func GetNotas(baseUrl string) (*[]Nota, error) {
 	queryParams.Add("fields", fmt.Sprintf("[\"%s\"]", strings.Join(fields, "\",\"")))
 	queryParams.Add("limit_start", "0")
 	queryParams.Add("limit_page_length", "200")
+
+	if os.Getenv("SEGUNDA_CHAMADA") == "1" {
+		queryParams.Add("filters", fmt.Sprintf(
+			"[[\"%s\",\"%s\",\"%d\"]]", "segunda_chamada", "=", 0))
+	}
 
 	// Create the URL with query parameters
 	requestURL := fmt.Sprintf("%s?%s", baseUrl, queryParams.Encode())
@@ -135,6 +145,8 @@ func toNotas(R *SysMeimeiResponse) *[]Nota {
 			EntClimat:    r.Climatizador,
 			NotaProva:    gradesAverage,
 			NotaFinal:    finalGrade,
+			SegChamada:   r.SegundaChamada,
+			Name:         r.Name,
 		}
 		notas = append(notas, nota)
 	}

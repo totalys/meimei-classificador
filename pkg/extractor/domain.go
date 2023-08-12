@@ -24,4 +24,8 @@ type Applicant struct {
 	Ingles                     string  `json:"inglês"`
 	Informatica_basica_sabado  string  `json:"informática_básica_sábado"`
 	Climatizador               string  `json:"climatização"`
+	SegundaChamada             int32   `json:"segunda_chamada"`
+	CursoAprovadoSabado        string  `json:"curso_aprovado,omitempty"`
+	CursoAprovadoDomingo       string  `json:"curso_aprovado_domingo,omitempty"`
+	Name                       string  `json:"name"`
 }

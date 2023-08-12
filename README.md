@@ -30,6 +30,11 @@ doc_type: Student Applicant => urlEncoded: Student%20Applicant
 * Campos a serem extraídos
     * "fields": [todos os campos do documento separados por vírgula]
  
+## Documentação
+
+[ErpNex API](https://frappeframework.com/docs/user/en/api/rest)
+
+
 ## Preparação para execução
 
 * Criar a pasta input, inserir o input.json com a lista de alunos conforme o padrão acima. 
