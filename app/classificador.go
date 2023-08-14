@@ -159,7 +159,7 @@ func main() {
 						classifiedStudents[choice].ApprovedStudents = append(classifiedStudents[choice].ApprovedStudents, *student)
 						days_approved = append(days_approved, courseConfigs[choice].Days...)
 					} else {
-						fmt.Printf("Aluno %s seria aprovado para o curso %s no dia %v mas não foi porque já está aprovado em %s nos dias: %v \n",
+						fmt.Printf("Aluno %s seria aprovado para o curso %s no dia %v mas não foi porque já está aprovado em %+v nos dias: %v \n",
 							student.Name, choice, courseConfigs[choice].Days, student.Approved, days_approved)
 					}
 					continue
