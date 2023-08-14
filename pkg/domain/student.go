@@ -15,8 +15,9 @@ type Student struct {
 }
 
 type Approved struct {
-	Course string
-	Days   []int
+	IsSenai bool
+	Course  string
+	Days    []int
 }
 
 func (s Student) GetChoicesNames(choiceMap map[string]CourseConfig) (choiceNames []string) {

@@ -7,6 +7,7 @@ type CourseConfig struct {
 	Days       []int  `json:"days"`
 	Sala       string `json:"sala"`
 	DataInicio string `json:"dataInicio"`
+	IsSenai    bool   `json:"is_senai"`
 }
 
 type CoursesConfigMap struct {

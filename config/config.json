@@ -7,7 +7,8 @@
             "wait": 10,
             "days": [6,7],
             "sala": "D05",
-            "dataInicio": "05/AGO (SÁBADO)"
+            "dataInicio": "05/AGO (SÁBADO)",
+            "is_senai": false
         },
         "205 - Iniciação Profissional - LM": {
             "name": "Iniciação Profissional",
@@ -15,7 +16,8 @@
             "wait": 10,
             "days": [6],
             "sala": "C13,D4,D7",
-            "dataInicio": "05/AGO (SÁBADO)"
+            "dataInicio": "05/AGO (SÁBADO)",
+            "is_senai": false
         },
         "210 - Auxiliar Administrativo - LM": {
             "name": "Auxiliar administrativo",
@@ -23,7 +25,8 @@
             "wait": 5,
             "days": [6],
             "sala": "D10",
-            "dataInicio": "05/AGO (SÁBADO)"
+            "dataInicio": "05/AGO (SÁBADO)",
+            "is_senai": true
         },
         "220 - Informática Básica - LM": {
             "name": "Informática domingo",
@@ -31,7 +34,8 @@
             "wait": 10,
             "days": [7],
             "sala": "D08",
-            "dataInicio": "05/AGO (SÁBADO)"
+            "dataInicio": "05/AGO (SÁBADO)",
+            "is_senai": true
         },
         "235 - Auxiliar Eletricista - LM": {
             "name": "Elétrica",
@@ -39,7 +43,8 @@
             "wait": 5,
             "days": [7],
             "sala": "D09",
-            "dataInicio": "06/AGO (DOMINGO)"
+            "dataInicio": "06/AGO (DOMINGO)",
+            "is_senai": true
         },
         "230 - Ajustador Soldador - LM": {
             "name": "Ajustador soldador",
@@ -47,7 +52,8 @@
             "wait": 10,
             "days": [7],
             "sala": "C02",
-            "dataInicio": "06/AGO (DOMINGO)"
+            "dataInicio": "06/AGO (DOMINGO)",
+            "is_senai": false
         },
         "245 - Climatização - LM": {
             "name": "Climatização",
@@ -55,7 +61,8 @@
             "wait": 5,
             "days": [7],
             "sala": "____",
-            "dataInicio": "___/AGO (_________)"
+            "dataInicio": "___/AGO (_________)",
+            "is_senai": true
         }
     }
 }

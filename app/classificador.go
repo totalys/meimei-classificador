@@ -150,17 +150,18 @@ func main() {
 				}
 				// Append the student to the approved students list for their course
 				if len(classifiedStudents[choice].ApprovedStudents) < courseConfigs[choice].Approved {
-					// if  contans(courseConfigs[choice].Day)
-					if canBeApproved(courseConfigs[choice].Days, days_approved) {
+
+					if canBeApproved(courseConfigs[choice], student, days_approved) {
 						student.Approved = append(student.Approved, domain.Approved{
-							Course: choice,
-							Days:   courseConfigs[choice].Days,
+							Course:  choice,
+							Days:    courseConfigs[choice].Days,
+							IsSenai: courseConfigs[choice].IsSenai,
 						})
 						classifiedStudents[choice].ApprovedStudents = append(classifiedStudents[choice].ApprovedStudents, *student)
 						days_approved = append(days_approved, courseConfigs[choice].Days...)
 					} else {
-						fmt.Printf("Aluno %s seria aprovado para o curso %s no dia %v mas não foi porque já está aprovado em %+v nos dias: %v \n",
-							student.Name, choice, courseConfigs[choice].Days, student.Approved, days_approved)
+						fmt.Printf("Aluno %s seria aprovado para o curso %s, do Senai? [%t], no dia(s) %v mas não foi porque já está aprovado em %+v no(s) dia(s): %v \n",
+							student.Name, choice, courseConfigs[choice].IsSenai, courseConfigs[choice].Days, student.Approved, days_approved)
 					}
 					continue
 				} else if len(classifiedStudents[choice].WaitlistStudents) < courseConfigs[choice].Waitlist {
@@ -328,9 +329,18 @@ func createReport(approvedStudents, waitlist []domain.Student, course, data, dat
 	}
 }
 
-func canBeApproved(currentChoiceDays, alreadyApprovedDays []int) bool {
+func canBeApproved(currentChoice domain.CourseConfig, student *domain.Student, alreadyApprovedDays []int) bool {
 	exists := false
-	for _, val1 := range currentChoiceDays {
+
+	if currentChoice.IsSenai {
+		for _, a := range student.Approved {
+			if a.IsSenai {
+				return false
+			}
+		}
+	}
+
+	for _, val1 := range currentChoice.Days {
 		for _, val2 := range alreadyApprovedDays {
 			if val1 == val2 {
 				exists = true

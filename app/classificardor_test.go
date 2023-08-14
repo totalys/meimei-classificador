@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/totalys/meimei-classificador/pkg/domain"
 )
 
 func TestCanBeApproved(t *testing.T) {
@@ -13,6 +14,7 @@ func TestCanBeApproved(t *testing.T) {
 	sabado := []int{6}
 	domingo := []int{7}
 	ambos := []int{6, 7}
+	student := domain.Student{}
 
 	scenarios := []struct {
 		name    string
@@ -37,10 +39,57 @@ func TestCanBeApproved(t *testing.T) {
 	for _, s := range scenarios {
 
 		// Act
-		got := canBeApproved(s.current, s.already)
+		got := canBeApproved(domain.CourseConfig{
+			Days: s.current,
+		}, &student, s.already)
 
 		// Assert
 		assert.Equal(t, got, s.expect, fmt.Sprintf("%s deveria retornar %t", s.name, s.expect))
+
+	}
+
+}
+
+func TestCanBeApprovedBySenaiTwice(t *testing.T) {
+
+	// Arrange
+	student := domain.Student{
+		Approved: []domain.Approved{
+			{
+				IsSenai: true,
+				Course:  "Course A",
+				Days:    []int{6},
+			}},
+	}
+
+	scenarios := []struct {
+		name    string
+		student domain.Student
+		course  domain.CourseConfig
+		expect  bool
+	}{
+		{
+			name:    "Curso atual não é do Senai",
+			student: student,
+			course:  domain.CourseConfig{IsSenai: false},
+			expect:  true,
+		},
+		{
+
+			name:    "Curso atual é do Senai",
+			student: student,
+			course:  domain.CourseConfig{IsSenai: true},
+			expect:  false,
+		},
+	}
+
+	for _, s := range scenarios {
+
+		// Act
+		got := canBeApproved(s.course, &s.student, []int{})
+
+		// Assert
+		assert.Equal(t, got, s.expect, fmt.Sprintf("%s deveria retornar %t", s.student.Name, s.expect))
 
 	}
 
