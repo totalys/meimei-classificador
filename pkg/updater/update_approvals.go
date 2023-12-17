@@ -54,7 +54,7 @@ func UpdateGrades(coursesConfigs map[string]domain.CourseConfig, baseUrl string,
 			return fmt.Errorf("error creating request %w", err)
 		}
 
-		req.Header.Set("Authorization", os.Getenv("LARMEIMEI_TIAGO_API_KEY"))
+		req.Header.Set("Authorization", os.Getenv("LARMEIMEI_USER_API_KEY"))
 		req.Header.Set("Content-Type", "application/json")
 
 		client := &http.Client{}
