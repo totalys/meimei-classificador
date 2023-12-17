@@ -68,5 +68,5 @@ A pasta /output será toda deletada e os arquivos serão gerados conforme as reg
 
 ## Envs
 
-ENV LARMEIMEI_TIAGO_API_KEY: api key and secret. ex: bearer [api_key]:[api_secret] criada na área de segurança do perfil de usuário do ErpNext
+ENV LARMEIMEI_USER_API_KEY: api key and secret. ex: bearer [api_key]:[api_secret] criada na área de segurança do perfil de usuário do ErpNext
 

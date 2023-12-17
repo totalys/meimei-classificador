@@ -19,7 +19,7 @@ import (
 )
 
 const (
-	baseUrl string = "https://larmeimei.org/api/resource/Student%20Applicant"
+	baseUrl string = "https://larmeimei.org/api/resource/LM%20Pre%20Registration"
 )
 
 type ClassifiedStudents struct {
@@ -55,12 +55,12 @@ func main() {
 	}
 	copy("../resources/logo.jpg", "../output/logo.jpg")
 
-	file, err := os.Open("../input/input.json")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	defer file.Close()
+	// file, err := os.Open("../input/input.json")
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	return
+	// }
+	// defer file.Close()
 
 	notas, err := extractor.GetNotas(baseUrl)
 	if err != nil {
