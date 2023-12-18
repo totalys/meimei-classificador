@@ -66,7 +66,7 @@ func GetNotas(baseUrl string) (*[]Nota, error) {
 	queryParams := url.Values{}
 	queryParams.Add("fields", fmt.Sprintf("[\"%s\"]", strings.Join(fields, "\",\"")))
 	queryParams.Add("limit_start", "0")
-	queryParams.Add("limit_page_length", "200")
+	queryParams.Add("limit_page_length", "1000")
 
 	if os.Getenv("SEGUNDA_CHAMADA") == "1" {
 		queryParams.Add("filters", fmt.Sprintf(
@@ -108,12 +108,12 @@ func GetNotas(baseUrl string) (*[]Nota, error) {
 	if err != nil {
 		return nil, fmt.Errorf("error parsing response: \n %+v \n to: \n %+v \n err: %+w", string(responseBody), R, err)
 	}
-	fmt.Println("total de alunos inscritos: ", len(R.Data))
+	fmt.Println("total de alunos listados: ", len(R.Data))
 	return toNotas(&R), nil
 }
 
 type SysMeimeiResponse struct {
-	Data []Applicant `json:"data"`
+	Data []PreRegistration `json:"data"`
 }
 
 // Enviar esse lembrete com o PDF !
@@ -160,7 +160,7 @@ func toNotas(R *SysMeimeiResponse) *[]Nota {
 	return &notas
 }
 
-func getFinalGrade(avg string, r Applicant) string {
+func getFinalGrade(avg string, r PreRegistration) string {
 	return average([]string{
 		avg,
 		r.Digitação,
@@ -331,11 +331,3 @@ func printFieldsToCSV(data interface{}, writer *csv.Writer) {
 
 	writer.Write(values)
 }
-
-// curl --request GET \
-//   --url 'https://larmeimei.org/api/resource/Student%20Applicant?fields=%5B%22first_name%22%2C%22last_name%22%2C%22idade%22%2C%22date_of_birth%22%2C%22op%C3%A7%C3%A3o_1_s%C3%A1bado%22%2C%22op%C3%A7%C3%A3o_2_s%C3%A1bado%22%2C%22op%C3%A7%C3%A3o_1_domingo%22%2C%22op%C3%A7%C3%A3o_2_domingo%22%2C%22student_mobile_number%22%2C%22matem%C3%A1tica%22%2C%22portugu%C3%AAs%22%2C%22l%C3%B3gica%22%2C%22reda%C3%A7%C3%A3o%22%2C%22inform%C3%A1tica_b%C3%A1sica_domingo%22%2C%22digita%C3%A7%C3%A3o%22%2C%22210_auxiliar_administrtativo%22%2C%22el%C3%A9trica%22%2C%22inicia%C3%A7%C3%A3o_profissional%22%2C%22montagem_de_micro%22%2C%22ajustador_soldador%22%2C%22ingl%C3%AAs%22%2C%22inform%C3%A1tica_b%C3%A1sica_s%C3%A1bado%22%5D' \
-//   --header 'Authorization: token 202a75613683489:4795b74d1265c27' \
-//   --header 'Content-Type: application/json' \
-//   --cookie 'system_user=yes; full_name=Guest; user_id=Guest; user_image='
-
-//https://larmeimei.org/api/resource/Student%20Applicant?fields=%5B%22first_name%22,%22last_name%22,%22idade%22,%22date_of_birth%22,%22op%C3%A7%C3%A3o_1_s%C3%A1bado%22,%22op%C3%A7%C3%A3o_2_s%C3%A1bado%22,%22op%C3%A7%C3%A3o_1_domingo%22,%22op%C3%A7%C3%A3o_2_domingo%22,%22student_mobile_number%22,%22matem%C3%A1tica%22,%22portugu%C3%AAs%22,%22l%C3%B3gica%22,%22reda%C3%A7%C3%A3o%22,%22inform%C3%A1tica_b%C3%A1sica_domingo%22,%22digita%C3%A7%C3%A3o%22,%22210_auxiliar_administrtativo%22,%22el%C3%A9trica%22,%22inicia%C3%A7%C3%A3o_profissional%22,%22montagem_de_micro%22,%22ajustador_soldador%22,%22ingl%C3%AAs%22,%22inform%C3%A1tica_b%C3%A1sica_s%C3%A1bado%22%5D

@@ -1,29 +1,14 @@
 {
-    "data": "SEM1 DE 2024",
+    "data": "1o SEMESTRE DE 2024",
     "coursesConfig": {
-        "215 - Digitação - LM": {
-            "name": "Digitação",
-            "approved": 25,
-            "wait": 10,
-            "days": [6,7],
-            "sala": "D05",
-            "dataInicio": "04/FEV (SÁBADO)"
-        },
-        "205 - Iniciação Profissional - LM": {
-            "name": "Iniciação Profissional",
-            "approved": 60,
-            "wait": 10,
-            "days": [6],
-            "sala": "C13,D4,D7",
-            "dataInicio": "04/FEV (SÁBADO)"
-        },
-        "210 - Auxiliar Administrativo - LM": {
+        "215 - Auxiliar Administrativo - LM": {
             "name": "Auxiliar administrativo",
-            "approved": 20,
-            "wait": 5,
+            "approved": 22,
+            "wait": 10,
             "days": [6],
-            "sala": "D10",
-            "dataInicio": "04/FEV (SÁBADO)"
+            "sala": "D09",
+            "dataInicio": "03/FEV (SÁBADO)",
+            "is_senai": true
         },
         "220 - Informática Básica - LM": {
             "name": "Informática domingo",
@@ -31,39 +16,58 @@
             "wait": 10,
             "days": [6],
             "sala": "D08",
-            "dataInicio": "04/FEV (SÁBADO)"
+            "dataInicio": "03/FEV (SÁBADO)",
+            "is_senai": true
         },
-        "270_inglês": {
+        "225 - Montagem de Micros - LM": {
+            "name": "Montagem de micro",
+            "approved": 16,
+            "wait": 5,
+            "days": [7],
+            "sala": "D02",
+            "dataInicio": "04/FEV (DOMINGO)",
+            "is_senai": true
+        },
+        "231 - Auxiliar Eletricista - LM": {
+            "name": "Auxiliar Eletricista",
+            "approved": 22,
+            "wait": 5,
+            "days": [7],
+            "sala": "D08",
+            "dataInicio": "04/FEV (DOMINGO)",
+            "is_senai": true
+        },
+        "250 - Iniciação Profissional - LM": {
+            "name": "Iniciação Profissional",
+            "approved": 60,
+            "wait": 10,
+            "days": [6],
+            "sala": "C13,D4,D7",
+            "dataInicio": "03/FEV (SÁBADO)"
+        },
+        "255 - Digitação - LM": {
+            "name": "Digitação",
+            "approved": 25,
+            "wait": 10,
+            "days": [6,7],
+            "sala": "D05",
+            "dataInicio": "03/FEV (SÁBADO)"
+        },
+        "260 - Ajustador Soldador - LM": {
+            "name": "Ajustador soldador",
+            "approved": 25,
+            "wait": 5,
+            "days": [7],
+            "sala": "C02",
+            "dataInicio": "04/FEV (DOMINGO)"
+        },
+        "270 - Inglês - LM": {
             "name": "Inglês",
             "approved": 35,
             "wait": 6,
             "days": [6],
             "sala": "B04,B05",
-            "dataInicio": "04/FEV (SÁBADO)"
-        },
-        "235_elétrica": {
-            "name": "Elétrica",
-            "approved": 22,
-            "wait": 5,
-            "days": [7],
-            "sala": "D09",
-            "dataInicio": "05/FEV (DOMINGO)"
-        },
-        "225_montagem_de_micro": {
-            "name": "Montagem de micro",
-            "approved": 16,
-            "wait": 5,
-            "days": [7],
-            "sala": "D03",
-            "dataInicio": "05/FEV (DOMINGO)"
-        },
-        "260_ajustador_soldador": {
-            "name": "Ajustador soldador",
-            "approved": 25,
-            "wait": 10,
-            "days": [7],
-            "sala": "C02",
-            "dataInicio": "05/FEV (DOMINGO)"
+            "dataInicio": "03/FEV (SÁBADO)"
         }
     }
 }

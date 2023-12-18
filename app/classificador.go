@@ -55,13 +55,6 @@ func main() {
 	}
 	copy("../resources/logo.jpg", "../output/logo.jpg")
 
-	// file, err := os.Open("../input/input.json")
-	// if err != nil {
-	// 	fmt.Println(err)
-	// 	return
-	// }
-	// defer file.Close()
-
 	notas, err := extractor.GetNotas(baseUrl)
 	if err != nil {
 		fmt.Println(err)
@@ -89,6 +82,8 @@ func main() {
 
 	students := []*domain.Student{}
 
+	var candidatosIncompletos = make([]string, 0)
+
 	for _, nota := range *notas {
 		var choices []string
 
@@ -104,9 +99,13 @@ func main() {
 		if nota.Domingo2a != "" {
 			choices = append(choices, nota.Domingo2a)
 		}
+
 		if len(choices) == 0 {
-			log.Printf("Error: Candidata(o):%s sem nenhum curso selecionado! Insira o curso escolhido e tente novamente", nota.Nome)
-			os.Exit(1)
+			log := fmt.Sprintf("sem curso pretendido: %s	telefone: %s", nota.Nome, nota.Celular)
+			candidatosIncompletos = append(candidatosIncompletos,
+				log)
+			fmt.Println(log)
+			continue
 		}
 
 		notaFinal, err := strconv.ParseFloat(strings.Replace(nota.NotaFinal, ",", ".", 1), 64)
@@ -126,6 +125,11 @@ func main() {
 			SegChamada: nota.SegChamada,
 			DocName:    nota.Name,
 		})
+	}
+
+	if len(candidatosIncompletos) > 0 {
+		log.Printf("Error: Alguns candidatos sem nenhum curso selecionado! Insira o curso escolhido para estes candidatos e tente novamente")
+		os.Exit(1)
 	}
 
 	// Create a map to store the approved students and waitlist students for each course
@@ -331,14 +335,6 @@ func createReport(approvedStudents, waitlist []domain.Student, course, data, dat
 
 func canBeApproved(currentChoice domain.CourseConfig, student *domain.Student, alreadyApprovedDays []int) bool {
 	exists := false
-
-	if currentChoice.IsSenai {
-		for _, a := range student.Approved {
-			if a.IsSenai {
-				return false
-			}
-		}
-	}
 
 	for _, val1 := range currentChoice.Days {
 		for _, val2 := range alreadyApprovedDays {
