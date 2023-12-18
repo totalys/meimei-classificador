@@ -1,5 +1,5 @@
 {
-    "data": "SEM1 DE 2024",
+    "data": "SEM2 DE 2023",
     "coursesConfig": {
         "215 - Digitação - LM": {
             "name": "Digitação",
@@ -7,7 +7,8 @@
             "wait": 10,
             "days": [6,7],
             "sala": "D05",
-            "dataInicio": "04/FEV (SÁBADO)"
+            "dataInicio": "05/AGO (SÁBADO)",
+            "is_senai": false
         },
         "205 - Iniciação Profissional - LM": {
             "name": "Iniciação Profissional",
@@ -15,7 +16,8 @@
             "wait": 10,
             "days": [6],
             "sala": "C13,D4,D7",
-            "dataInicio": "04/FEV (SÁBADO)"
+            "dataInicio": "05/AGO (SÁBADO)",
+            "is_senai": false
         },
         "210 - Auxiliar Administrativo - LM": {
             "name": "Auxiliar administrativo",
@@ -23,47 +25,44 @@
             "wait": 5,
             "days": [6],
             "sala": "D10",
-            "dataInicio": "04/FEV (SÁBADO)"
+            "dataInicio": "05/AGO (SÁBADO)",
+            "is_senai": true
         },
         "220 - Informática Básica - LM": {
             "name": "Informática domingo",
             "approved": 30,
             "wait": 10,
-            "days": [6],
+            "days": [7],
             "sala": "D08",
-            "dataInicio": "04/FEV (SÁBADO)"
+            "dataInicio": "05/AGO (SÁBADO)",
+            "is_senai": true
         },
-        "270_inglês": {
-            "name": "Inglês",
-            "approved": 35,
-            "wait": 6,
-            "days": [6],
-            "sala": "B04,B05",
-            "dataInicio": "04/FEV (SÁBADO)"
-        },
-        "235_elétrica": {
+        "235 - Auxiliar Eletricista - LM": {
             "name": "Elétrica",
             "approved": 22,
             "wait": 5,
             "days": [7],
             "sala": "D09",
-            "dataInicio": "05/FEV (DOMINGO)"
+            "dataInicio": "06/AGO (DOMINGO)",
+            "is_senai": true
         },
-        "225_montagem_de_micro": {
-            "name": "Montagem de micro",
-            "approved": 16,
-            "wait": 5,
-            "days": [7],
-            "sala": "D03",
-            "dataInicio": "05/FEV (DOMINGO)"
-        },
-        "260_ajustador_soldador": {
+        "230 - Ajustador Soldador - LM": {
             "name": "Ajustador soldador",
             "approved": 25,
             "wait": 10,
             "days": [7],
             "sala": "C02",
-            "dataInicio": "05/FEV (DOMINGO)"
+            "dataInicio": "06/AGO (DOMINGO)",
+            "is_senai": false
+        },
+        "245 - Climatização - LM": {
+            "name": "Climatização",
+            "approved": 20,
+            "wait": 5,
+            "days": [7],
+            "sala": "____",
+            "dataInicio": "___/AGO (_________)",
+            "is_senai": true
         }
     }
 }

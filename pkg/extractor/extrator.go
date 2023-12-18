@@ -17,15 +17,18 @@ import (
 
 var (
 	now    = time.Now()
-	fields = []string{"first_name", "last_name", "idade", "date_of_birth",
-		"opção_1_sábado", "opção_2_sábado", "opção_1_domingo", "opção_2_domingo",
-		"student_mobile_number",
-		"matemática", "português", "lógica", "redação",
-		"informática_básica_domingo", "digitação",
-		"210_auxiliar_administrtativo", "elétrica",
-		"iniciação_profissional", "montagem_de_micro",
-		"ajustador_soldador", "inglês", "informática_básica_sábado",
-		"segunda_chamada", "name"}
+	fields = []string{"full_name", "idade", "date_of_birth", "sab_op1", "sab_op2", "dom_op1",
+		"dom_op2", "student_mobile_number", "matemática", "português", "lógica", "redação",
+		"220_informática",
+		"205_iniciação_profissional",
+		"210_auxiliar_administrativo",
+		"215_digitação",
+		"225_montagem_de_micro",
+		"235_elétrica",
+		"245_climatização",
+		"260_ajustador_soldador",
+		"270_inglês",
+		"program_sab", "program_sab2", "program_dom", "name"}
 )
 
 type Nota struct {
@@ -69,6 +72,9 @@ func GetNotas(baseUrl string) (*[]Nota, error) {
 		queryParams.Add("filters", fmt.Sprintf(
 			"[[\"%s\",\"%s\",\"%d\"]]", "segunda_chamada", "=", 0))
 	}
+
+	queryParams.Add("filters", fmt.Sprintf(
+		"[[\"%s\",\"%s\",\"%s\"]]", "status", "=", "applied"))
 
 	// Create the URL with query parameters
 	requestURL := fmt.Sprintf("%s?%s", baseUrl, queryParams.Encode())
@@ -122,7 +128,7 @@ func toNotas(R *SysMeimeiResponse) *[]Nota {
 		gradesAverage := getGradeAverage(r.Portugues, r.Matematica, r.Logica, r.Redacao)
 		finalGrade := getFinalGrade(gradesAverage, r)
 		nota := Nota{
-			Nome:         fmt.Sprintf("%s %s", r.First_name, r.Last_name),
+			Nome:         r.FullName,
 			Celular:      stripNonNumeric(r.Celular),
 			Idade:        getAge(now, int(math.Floor(r.Idade)), r.Date_of_birth),
 			Sabado1a:     r.Opcao_1_sabado,
