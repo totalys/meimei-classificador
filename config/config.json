@@ -14,9 +14,27 @@
             "name": "Informática domingo",
             "approved": 30,
             "wait": 10,
+            "days": [6,7],
+            "sala": "D07",
+            "dataInicio": "(03 e 04)/FEV (SÁBADO/DOMINGO)",
+            "is_senai": true
+        },
+        "220 - Informática Básica - Sabado - LM": {
+            "name": "Informática sábado",
+            "approved": 30,
+            "wait": 10,
             "days": [6],
-            "sala": "D08",
+            "sala": "D07",
             "dataInicio": "03/FEV (SÁBADO)",
+            "is_senai": true
+        },
+        "220 - Informática Básica - Domingo - LM": {
+            "name": "Informática domingo",
+            "approved": 30,
+            "wait": 10,
+            "days": [7],
+            "sala": "D07",
+            "dataInicio": "04/FEV (DOMINGO)",
             "is_senai": true
         },
         "225 - Montagem de Micros - LM": {

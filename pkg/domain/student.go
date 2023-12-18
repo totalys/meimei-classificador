@@ -25,5 +25,6 @@ func (s Student) GetChoicesNames(choiceMap map[string]CourseConfig) (choiceNames
 	for _, c := range s.Choices {
 		choiceNames = append(choiceNames, fmt.Sprintf("%s[%s]", choiceMap[c].Name, c))
 	}
+
 	return choiceNames
 }

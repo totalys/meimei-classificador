@@ -20,6 +20,10 @@ import (
 
 const (
 	baseUrl string = "https://larmeimei.org/api/resource/LM%20Pre%20Registration"
+
+	informatica = "220 - Informática Básica - LM"
+	infoSabado  = "220 - Informática Básica - Sabado - LM"
+	infoDomingo = "220 - Informática Básica - Domingo - LM"
 )
 
 type ClassifiedStudents struct {
@@ -48,11 +52,13 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
 	folderPath := "../output"
 	err = os.Mkdir(folderPath, os.ModePerm)
 	if err != nil {
 		panic(err)
 	}
+
 	copy("../resources/logo.jpg", "../output/logo.jpg")
 
 	notas, err := extractor.GetNotas(baseUrl)
@@ -88,16 +94,35 @@ func main() {
 		var choices []string
 
 		if nota.Sabado1a != "" {
-			choices = append(choices, nota.Sabado1a)
+			var choice = nota.Sabado1a
+			if choice == informatica {
+				choice = infoSabado
+			}
+			choices = append(choices, choice)
 		}
+
 		if nota.Sabado2a != "" {
-			choices = append(choices, nota.Sabado2a)
+			var choice = nota.Sabado2a
+			if choice == informatica {
+				choice = infoSabado
+			}
+			choices = append(choices, choice)
 		}
+
 		if nota.Domingo1a != "" {
-			choices = append(choices, nota.Domingo1a)
+			var choice = nota.Domingo1a
+			if choice == informatica {
+				choice = infoDomingo
+			}
+			choices = append(choices, choice)
 		}
+
 		if nota.Domingo2a != "" {
-			choices = append(choices, nota.Domingo2a)
+			var choice = nota.Domingo2a
+			if choice == informatica {
+				choice = infoDomingo
+			}
+			choices = append(choices, choice)
 		}
 
 		if len(choices) == 0 {
@@ -176,6 +201,7 @@ func main() {
 			}
 		}
 	}
+
 	fmt.Println("Lista para divulgação")
 	for course, classified := range classifiedStudents {
 		fmt.Printf("\nCurso: %s\n\n", courseConfigs[course].Name)
@@ -235,6 +261,7 @@ func main() {
 		sbAll.WriteString(sb.String())
 		sb.Reset()
 	}
+
 	sb.WriteString(sbAll.String())
 	fmt.Printf("\n\nAlunos não classificados: \n\n")
 	sb.WriteString("Alunos não classificados \n\n")
