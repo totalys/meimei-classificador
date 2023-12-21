@@ -11,6 +11,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	_ "unicode/utf8"
 
 	"github.com/360EntSecGroup-Skylar/excelize"
 	"github.com/totalys/meimei-classificador/pkg/domain"
@@ -22,8 +23,8 @@ const (
 	baseUrl string = "https://larmeimei.org/api/resource/LM%20Pre%20Registration"
 
 	informatica = "220 - Informática Básica - LM"
-	infoSabado  = "220 - Informática Básica - Sabado - LM"
-	infoDomingo = "220 - Informática Básica - Domingo - LM"
+	infoSabado  = "220 - Informática Básica - LM/Sabado"
+	infoDomingo = "220 - Informática Básica - LM/Domingo"
 )
 
 type ClassifiedStudents struct {
@@ -230,9 +231,17 @@ func main() {
 	sbAll := strings.Builder{}
 
 	for course, classified := range classifiedStudents {
-		fmt.Printf("Curso: %s\n\n", courseConfigs[course].Name)
+
+		c, ok := courseConfigs[course]
+		if !ok {
+			fmt.Printf("curso: [%s] não configurado. Será ignorado nos relatórios\n", course)
+			continue
+		}
+		courseName := c.Name
+
+		fmt.Printf("Curso: %s\n\n", courseName)
 		fmt.Println("Nome \t Idade \t Contato \t Nota final \t link whatsapp \t 2a chamada")
-		sb.WriteString(fmt.Sprintf("Curso: %s\n\n", courseConfigs[course].Name))
+		sb.WriteString(fmt.Sprintf("Curso: %s\n\n", courseName))
 		sb.WriteString("Nome \t Idade \t Contato \t Nota final \t link whatsapp \t 2a chamada\n")
 
 		// sort students by name
@@ -257,7 +266,7 @@ func main() {
 		}
 		sb.WriteString("\n\n")
 
-		go writeExcelFile(courseConfigs[course].Name, sb.String())
+		writeExcelFile(courseName, sb.String())
 		sbAll.WriteString(sb.String())
 		sb.Reset()
 	}
@@ -268,6 +277,11 @@ func main() {
 	for _, student := range students {
 		if len(student.Approved) == 0 && !student.Waitlisted {
 			choiceNames := student.GetChoicesNames(courseConfigs)
+
+			if len(choiceNames) == 0 {
+				continue
+			}
+
 			fmt.Printf("%s \t %s \t %s \t cursos:%+v\n", student.Name, student.Age, student.Phone, choiceNames)
 			sb.WriteString(fmt.Sprintf("%s \t %s \t %s \t %s \t cursos:%+v\n",
 				student.Name, student.Age, student.Phone, fmt.Sprintf("%.2f", student.Grade), choiceNames))
@@ -363,6 +377,7 @@ func createReport(approvedStudents, waitlist []domain.Student, course, data, dat
 func canBeApproved(currentChoice domain.CourseConfig, student *domain.Student, alreadyApprovedDays []int) bool {
 	exists := false
 
+	// Valida se o aluno já foi aprovado em um curso no dia do curso solicitado
 	for _, val1 := range currentChoice.Days {
 		for _, val2 := range alreadyApprovedDays {
 			if val1 == val2 {
@@ -371,6 +386,15 @@ func canBeApproved(currentChoice domain.CourseConfig, student *domain.Student, a
 			}
 		}
 	}
+
+	// Valida se o aluno já foi aprovado neste curso que ele quer fazer
+	for _, courseApproved := range student.Approved {
+		if strings.Split(currentChoice.Name, "/")[0] == strings.Split(courseApproved.Course, "/")[0] {
+			exists = true
+			break
+		}
+	}
+
 	return !exists
 }
 

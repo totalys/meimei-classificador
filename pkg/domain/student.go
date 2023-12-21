@@ -22,8 +22,13 @@ type Approved struct {
 
 func (s Student) GetChoicesNames(choiceMap map[string]CourseConfig) (choiceNames []string) {
 
+	// somente considera cursos cadastrados na configuração
 	for _, c := range s.Choices {
-		choiceNames = append(choiceNames, fmt.Sprintf("%s[%s]", choiceMap[c].Name, c))
+		course, ok := choiceMap[c]
+		if !ok {
+			continue
+		}
+		choiceNames = append(choiceNames, fmt.Sprintf("%s[%s]", course.Name, c))
 	}
 
 	return choiceNames

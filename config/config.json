@@ -8,7 +8,8 @@
             "days": [6],
             "sala": "D09",
             "dataInicio": "03/FEV (SÁBADO)",
-            "is_senai": true
+            "is_senai": true,
+            "enroll": false
         },
         "220 - Informática Básica - LM": {
             "name": "Informática domingo",
@@ -17,25 +18,28 @@
             "days": [6,7],
             "sala": "D07",
             "dataInicio": "(03 e 04)/FEV (SÁBADO/DOMINGO)",
-            "is_senai": true
+            "is_senai": true,
+            "enroll": true
         },
-        "220 - Informática Básica - Sabado - LM": {
+        "220 - Informática Básica - LM/Sabado": {
             "name": "Informática sábado",
             "approved": 30,
             "wait": 10,
             "days": [6],
             "sala": "D07",
             "dataInicio": "03/FEV (SÁBADO)",
-            "is_senai": true
+            "is_senai": true,
+            "enroll": true
         },
-        "220 - Informática Básica - Domingo - LM": {
+        "220 - Informática Básica - LM/Domingo": {
             "name": "Informática domingo",
             "approved": 30,
             "wait": 10,
             "days": [7],
             "sala": "D07",
             "dataInicio": "04/FEV (DOMINGO)",
-            "is_senai": true
+            "is_senai": true,
+            "enroll": true
         },
         "225 - Montagem de Micros - LM": {
             "name": "Montagem de micro",
@@ -44,7 +48,8 @@
             "days": [7],
             "sala": "D02",
             "dataInicio": "04/FEV (DOMINGO)",
-            "is_senai": true
+            "is_senai": true,
+            "enroll": true
         },
         "231 - Auxiliar Eletricista - LM": {
             "name": "Auxiliar Eletricista",
@@ -53,7 +58,18 @@
             "days": [7],
             "sala": "D08",
             "dataInicio": "04/FEV (DOMINGO)",
-            "is_senai": true
+            "is_senai": true,
+            "enroll": true
+        },
+        "232 - Eletricista Instalador - LM": {
+            "name": "Eletricista instalador",
+            "approved": 22,
+            "wait": 5,
+            "days": [6],
+            "sala": "D08",
+            "dataInicio": "03/FEV (SABADO)",
+            "is_senai": true,
+            "enroll": true
         },
         "250 - Iniciação Profissional - LM": {
             "name": "Iniciação Profissional",
@@ -61,7 +77,9 @@
             "wait": 10,
             "days": [6],
             "sala": "C13,D4,D7",
-            "dataInicio": "03/FEV (SÁBADO)"
+            "dataInicio": "03/FEV (SÁBADO)",
+            "is_senai": true,
+            "enroll": false
         },
         "255 - Digitação - LM": {
             "name": "Digitação",
@@ -69,7 +87,9 @@
             "wait": 10,
             "days": [6,7],
             "sala": "D05",
-            "dataInicio": "03/FEV (SÁBADO)"
+            "dataInicio": "03/FEV (SÁBADO)",
+            "is_senai": false,
+            "enroll": true
         },
         "260 - Ajustador Soldador - LM": {
             "name": "Ajustador soldador",
@@ -77,7 +97,9 @@
             "wait": 5,
             "days": [7],
             "sala": "C02",
-            "dataInicio": "04/FEV (DOMINGO)"
+            "dataInicio": "04/FEV (DOMINGO)",
+            "is_senai": false,
+            "enroll": true
         },
         "270 - Inglês - LM": {
             "name": "Inglês",
@@ -85,7 +107,9 @@
             "wait": 6,
             "days": [6],
             "sala": "B04,B05",
-            "dataInicio": "03/FEV (SÁBADO)"
+            "dataInicio": "03/FEV (SÁBADO)",
+            "is_senai": false,
+            "enroll": true
         }
     }
 }
