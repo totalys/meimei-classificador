@@ -334,6 +334,7 @@ func main() {
 
 func createReport(approvedStudents, waitlist []domain.Student, course, data, dataInicio, sala string) {
 
+	course = strings.ReplaceAll(course, "/", " - ")
 	// Parse the template with the data for approved students and waitlist
 	tmpl, err := template.ParseFiles("template.html")
 	if err != nil {

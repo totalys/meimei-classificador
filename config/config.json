@@ -12,7 +12,7 @@
             "enroll": false
         },
         "220 - Informática Básica - LM": {
-            "name": "Informática domingo",
+            "name": "220 - Informática Básica - LM",
             "approved": 30,
             "wait": 10,
             "days": [6,7],
@@ -22,7 +22,7 @@
             "enroll": true
         },
         "220 - Informática Básica - LM/Sabado": {
-            "name": "Informática sábado",
+            "name": "220 - Informática Básica - LM/Sábado",
             "approved": 30,
             "wait": 10,
             "days": [6],
@@ -32,7 +32,7 @@
             "enroll": true
         },
         "220 - Informática Básica - LM/Domingo": {
-            "name": "Informática domingo",
+            "name": "220 - Informática Básica - LM/Domingo",
             "approved": 30,
             "wait": 10,
             "days": [7],

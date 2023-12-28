@@ -12,6 +12,19 @@ import (
 	"github.com/totalys/meimei-classificador/pkg/domain"
 )
 
+var course_student_group_map = map[string]string{
+	"220 - Informática Básica - LM/Domingo": "220-SG-2024/Dom (INFORMÁTICA BÁSICA)",
+	"220 - Informática Básica - LM/Sabado":  "220-SG-2024/Sáb (INFORMÁTICA BÁSICA)",
+	"260 - Ajustador Soldador - LM":         "260-SG-2024 (AJUSTADOR SOLDADOR)",
+	"231 - Auxiliar Eletricista - LM":       "231-SG-2024/Sem01 (AUXILIAR ELETRICISTA)",
+	"225 - Montagem de Micros - LM":         "225-SG-2024 (MONTAGEM DE MICRO)",
+	"215 - Auxiliar Administrativo - LM":    "215-SG-2024 (AUX.ADMINISTRATIVO)",
+	"232 - Eletricista Instalador - LM":     "232-SG-2024 (ELETRICISTA INSTALADOR)",
+	"255 - Digitação - LM":                  "255-SG-2024/Sem01 (DIGITAÇÃO)",
+	"270 - Inglês - LM":                     "270-SG-2024 (INGLÊS)",
+	"250 - Iniciação Profissional - LM":     "251-SG-2024/Sem01 (INIC.PROF.BÁSICO)",
+}
+
 func UpdateGrades(coursesConfigs map[string]domain.CourseConfig, baseUrl string, students []*domain.Student) error {
 	log.Println("atualizando o Sysmeimei 2.0 ...")
 	for i, s := range students {
@@ -28,17 +41,21 @@ func UpdateGrades(coursesConfigs map[string]domain.CourseConfig, baseUrl string,
 		for _, a := range s.Approved {
 			for _, d := range a.Days {
 				if d == 6 {
-					sabado = a.Course
+					sabado = course_student_group_map[a.Course]
 				}
 				if d == 7 {
-					domingo = a.Course
+					domingo = course_student_group_map[a.Course]
 				}
 			}
 		}
 
+		if sabado == "" && domingo == "" {
+			continue
+		}
+
 		var data = struct {
-			CursoAprovadoSabado  string `json:"curso_aprovado"`
-			CursoAprovadoDomingo string `json:"curso_aprovado_domingo"`
+			CursoAprovadoSabado  string `json:"student_group_sab"`
+			CursoAprovadoDomingo string `json:"student_group_dom"`
 		}{
 			CursoAprovadoSabado:  sabado,
 			CursoAprovadoDomingo: domingo,
