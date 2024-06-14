@@ -20,7 +20,7 @@ import (
 )
 
 const (
-	baseUrl string = "https://larmeimei.org/api/resource/LM%20Pre%20Registration"
+	baseUrl string = "https://larmeimei.org/api/resource/LM%20Interview"
 
 	informatica = "220 - Informática Básica - LM"
 	infoSabado  = "220 - Informática Básica - LM/Sabado"
@@ -91,7 +91,7 @@ func main() {
 
 	var candidatosIncompletos = make([]string, 0)
 
-	for _, nota := range *notas {
+	for _, nota := range notas {
 		var choices []string
 
 		if nota.Sabado1a != "" {
