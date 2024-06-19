@@ -14,7 +14,11 @@ func TestCanBeApproved(t *testing.T) {
 	sabado := []int{6}
 	domingo := []int{7}
 	ambos := []int{6, 7}
-	student := domain.Student{}
+	student := domain.Student{
+		Entrevistas: map[string]float64{
+			"Course A": 10,
+		},
+	}
 
 	scenarios := []struct {
 		name    string
@@ -41,15 +45,16 @@ func TestCanBeApproved(t *testing.T) {
 		// Act
 		got := canBeApproved(domain.CourseConfig{
 			Days: s.current,
-		}, &student, s.already)
+		}, &student, s.already, "Course A")
 
 		// Assert
-		assert.Equal(t, got, s.expect, fmt.Sprintf("%s deveria retornar %t", s.name, s.expect))
+		assert.Equal(t, s.expect, got, fmt.Sprintf("%s deveria retornar %t", s.name, s.expect))
 
 	}
 
 }
 
+// Regra está desligada
 func TestCanBeApprovedBySenaiTwice(t *testing.T) {
 
 	// Arrange
@@ -60,6 +65,9 @@ func TestCanBeApprovedBySenaiTwice(t *testing.T) {
 				Course:  "Course A",
 				Days:    []int{6},
 			}},
+		Entrevistas: map[string]float64{
+			"Course A": 10,
+		},
 	}
 
 	scenarios := []struct {
@@ -86,10 +94,10 @@ func TestCanBeApprovedBySenaiTwice(t *testing.T) {
 	for _, s := range scenarios {
 
 		// Act
-		got := canBeApproved(s.course, &s.student, []int{})
+		got := canBeApproved(s.course, &s.student, []int{}, "Course A")
 
 		// Assert
-		assert.Equal(t, got, s.expect, fmt.Sprintf("%s deveria retornar %t", s.student.Name, s.expect))
+		assert.Equal(t, s.expect, got, fmt.Sprintf("%s deveria retornar %t", s.student.Name, s.expect))
 
 	}
 
