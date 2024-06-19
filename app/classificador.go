@@ -21,10 +21,6 @@ import (
 
 const (
 	baseUrl string = "https://larmeimei.org/api/resource/LM%20Interview"
-
-	informatica = "220 - Informática Básica - LM"
-	infoSabado  = "220 - Informática Básica - LM/Sabado"
-	infoDomingo = "220 - Informática Básica - LM/Domingo"
 )
 
 type ClassifiedStudents struct {
@@ -94,35 +90,23 @@ func main() {
 	for _, nota := range notas {
 		var choices []string
 
-		if nota.Sabado1a != "" {
-			var choice = nota.Sabado1a
-			if choice == informatica {
-				choice = infoSabado
-			}
-			choices = append(choices, choice)
-		}
-
-		if nota.Sabado2a != "" {
-			var choice = nota.Sabado2a
-			if choice == informatica {
-				choice = infoSabado
-			}
-			choices = append(choices, choice)
-		}
-
 		if nota.Domingo1a != "" {
 			var choice = nota.Domingo1a
-			if choice == informatica {
-				choice = infoDomingo
-			}
 			choices = append(choices, choice)
 		}
 
 		if nota.Domingo2a != "" {
 			var choice = nota.Domingo2a
-			if choice == informatica {
-				choice = infoDomingo
-			}
+			choices = append(choices, choice)
+		}
+
+		if nota.Sabado1a != "" {
+			var choice = nota.Sabado1a
+			choices = append(choices, choice)
+		}
+
+		if nota.Sabado2a != "" {
+			var choice = nota.Sabado2a
 			choices = append(choices, choice)
 		}
 
@@ -141,15 +125,16 @@ func main() {
 		}
 
 		students = append(students, &domain.Student{
-			Name:       nota.Nome,
-			Choices:    choices,
-			Grade:      notaFinal,
-			Approved:   []domain.Approved{},
-			Waitlisted: false,
-			Age:        nota.Idade,
-			Phone:      nota.Celular,
-			SegChamada: nota.SegChamada,
-			DocName:    nota.Name,
+			Name:        nota.Nome,
+			Choices:     choices,
+			Grade:       notaFinal,
+			Approved:    []domain.Approved{},
+			Waitlisted:  false,
+			Age:         nota.Idade,
+			Phone:       nota.Celular,
+			SegChamada:  nota.SegChamada,
+			DocName:     nota.Name,
+			Entrevistas: nota.Entrevistas,
 		})
 	}
 
@@ -166,10 +151,13 @@ func main() {
 		return students[i].Grade > students[j].Grade
 	})
 
+	fmt.Printf("Total de alunos: %d\n", len(students))
+
 	// Iterate through the list of students
 	for _, student := range students {
 		// Check if the student's grade is above or equal to the passing grade
 		days_approved := []int{}
+		days_approved_or_waitlisted := []int{}
 		if student.Grade >= 0 {
 			// Iterate through the student's choices
 			for _, choice := range student.Choices {
@@ -181,7 +169,7 @@ func main() {
 				// Append the student to the approved students list for their course
 				if len(classifiedStudents[choice].ApprovedStudents) < courseConfigs[choice].Approved {
 
-					if canBeApproved(courseConfigs[choice], student, days_approved) {
+					if canBeApproved(courseConfigs[choice], student, days_approved, choice) {
 						student.Approved = append(student.Approved, domain.Approved{
 							Course:  choice,
 							Days:    courseConfigs[choice].Days,
@@ -189,14 +177,23 @@ func main() {
 						})
 						classifiedStudents[choice].ApprovedStudents = append(classifiedStudents[choice].ApprovedStudents, *student)
 						days_approved = append(days_approved, courseConfigs[choice].Days...)
+						days_approved_or_waitlisted = append(days_approved_or_waitlisted, courseConfigs[choice].Days...)
 					} else {
 						fmt.Printf("Aluno %s seria aprovado para o curso %s, do Senai? [%t], no dia(s) %v mas não foi porque já está aprovado em %+v no(s) dia(s): %v \n",
 							student.Name, choice, courseConfigs[choice].IsSenai, courseConfigs[choice].Days, student.Approved, days_approved)
 					}
 					continue
 				} else if len(classifiedStudents[choice].WaitlistStudents) < courseConfigs[choice].Waitlist {
-					student.Waitlisted = true
-					classifiedStudents[choice].WaitlistStudents = append(classifiedStudents[choice].WaitlistStudents, *student)
+
+					if canBeWaitListed(courseConfigs[choice], days_approved_or_waitlisted) {
+						student.Waitlisted = true
+						classifiedStudents[choice].WaitlistStudents = append(classifiedStudents[choice].WaitlistStudents, *student)
+						// days_approved_or_waitlisted = append(days_approved_or_waitlisted, courseConfigs[choice].Days...)
+					} else {
+						fmt.Printf("Aluno %s seria adicionado na lista de espera de %s no dia(s) %v mas não foi porque já está em uma lista de espera em pelo menos um curso nos dias %v \n",
+							student.Name, choice, courseConfigs[choice].Days, days_approved)
+					}
+
 					continue
 				}
 			}
@@ -375,7 +372,22 @@ func createReport(approvedStudents, waitlist []domain.Student, course, data, dat
 	}
 }
 
-func canBeApproved(currentChoice domain.CourseConfig, student *domain.Student, alreadyApprovedDays []int) bool {
+func canBeWaitListed(currentChoice domain.CourseConfig, alreadyApprovedDays []int) bool {
+	exists := false
+
+	// Valida se o aluno já foi aprovado em um curso no dia do curso solicitado
+	for _, val1 := range currentChoice.Days {
+		for _, val2 := range alreadyApprovedDays {
+			if val1 == val2 {
+				exists = true
+				break
+			}
+		}
+	}
+	return !exists
+}
+
+func canBeApproved(currentChoice domain.CourseConfig, student *domain.Student, alreadyApprovedDays []int, choice string) bool {
 	exists := false
 
 	// Valida se o aluno já foi aprovado em um curso no dia do curso solicitado
@@ -394,6 +406,12 @@ func canBeApproved(currentChoice domain.CourseConfig, student *domain.Student, a
 			exists = true
 			break
 		}
+	}
+
+	// Valida se o aluno não tirou 0 na entrevista do curso em que está tentando se inscrever
+	if student.Entrevistas[choice] == 0 {
+		fmt.Printf("Aluno %s seria aprovado em %s mas não foi porque tirou %f na entrevista.", student.Name, currentChoice.Name, student.Entrevistas[choice])
+		exists = true
 	}
 
 	return !exists
@@ -428,7 +446,7 @@ func checkInconsistencies(courseConfigs map[string]domain.CourseConfig, classifi
 		}
 	}
 
-	fmt.Println("Students with more than one course on the same day:", multiCourseSameDayStudents)
+	fmt.Println("Alunos aprovados em mais de um curso no mesmo dia:", multiCourseSameDayStudents)
 }
 
 func writeExcelFile(curso, content string) {
