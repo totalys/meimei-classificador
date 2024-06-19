@@ -3,15 +3,16 @@ package domain
 import "fmt"
 
 type Student struct {
-	Name       string     `json:"name"`
-	Choices    []string   `json:"choices"`
-	Grade      float64    `json:"grade"`
-	Approved   []Approved `json:"approved"`
-	Waitlisted bool       `json:"waitlisted"`
-	Age        string     `json:"idade"`
-	Phone      string     `json:"celular"`
-	SegChamada int32      `json:"segunda_chamada"`
-	DocName    string     `json:"doc_name"`
+	Name        string             `json:"name"`
+	Choices     []string           `json:"choices"`
+	Grade       float64            `json:"grade"`
+	Approved    []Approved         `json:"approved"`
+	Waitlisted  bool               `json:"waitlisted"`
+	Age         string             `json:"idade"`
+	Phone       string             `json:"celular"`
+	SegChamada  int32              `json:"segunda_chamada"`
+	DocName     string             `json:"doc_name"`
+	Entrevistas map[string]float64 `json:"entrevistas"`
 }
 
 type Approved struct {

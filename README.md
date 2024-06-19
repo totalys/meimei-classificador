@@ -11,10 +11,10 @@ Os dados extraídos do ErpNext.
 
 ### Api do ErpNext
 
-url: https://larmeimei.org/api/resource/Student%20Applicant
+url: https://larmeimei.org/api/resource/LM%20Interview
 
 domínio lar Meimei: larmeimei.org
-doc_type: Student Applicant => urlEncoded: Student%20Applicant
+doc_type: Student Applicant => urlEncoded: LM%20Interview
 
 **Headers**
 
@@ -70,3 +70,4 @@ A pasta /output será toda deletada e os arquivos serão gerados conforme as reg
 
 ENV LARMEIMEI_USER_API_KEY: api key and secret. ex: bearer [api_key]:[api_secret] criada na área de segurança do perfil de usuário do ErpNext
 
+$ `export LARMEIMEI_USER_API_KEY=bearer XXXX:XXXX`

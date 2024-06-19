@@ -1,68 +1,68 @@
 {
-    "data": "SEM2 DE 2023",
+    "data": "2o SEMESTRE DE 2024",
     "coursesConfig": {
-        "215 - Digitação - LM": {
-            "name": "Digitação",
-            "approved": 25,
-            "wait": 10,
-            "days": [6,7],
-            "sala": "D05",
-            "dataInicio": "05/AGO (SÁBADO)",
-            "is_senai": false
-        },
-        "205 - Iniciação Profissional - LM": {
-            "name": "Iniciação Profissional",
-            "approved": 60,
-            "wait": 10,
-            "days": [6],
-            "sala": "C13,D4,D7",
-            "dataInicio": "05/AGO (SÁBADO)",
-            "is_senai": false
-        },
-        "210 - Auxiliar Administrativo - LM": {
+        "215-SG-2024-25 / AUXILIAR ADMIN. (Turma 5)": {
             "name": "Auxiliar administrativo",
-            "approved": 20,
+            "approved": 22,
             "wait": 5,
             "days": [6],
-            "sala": "D10",
-            "dataInicio": "05/AGO (SÁBADO)",
+            "sala": "D09",
+            "dataInicio": "03/AGO (SÁBADO)",
             "is_senai": true
         },
-        "220 - Informática Básica - LM": {
-            "name": "Informática domingo",
+        "220-SG-2024.02A / INFORMÁTICA BÁSICA (domingo)": {
+            "name": "Informática básica domingo",
             "approved": 30,
+            "wait": 5,
+            "days": [7],
+            "sala": "D07",
+            "dataInicio": "04/AGO (DOMINGO)",
+            "is_senai": true
+        },
+        "220-SG-2024.02B / INFORMÁTICA BÁSICA (sábado)": {
+            "name": "Informática básica sábado",
+            "approved": 30,
+            "wait": 5,
+            "days": [6],
+            "sala": "D07",
+            "dataInicio": "03/AGO (SÁBADO)",
+            "is_senai": true
+        },
+        "231-SG-2024.02 / AUXILIAR ELETRICISTA": {
+            "name": "Auxiliar Eletricista",
+            "approved": 22,
             "wait": 10,
             "days": [7],
             "sala": "D08",
-            "dataInicio": "05/AGO (SÁBADO)",
+            "dataInicio": "04/AGO (DOMINGO)",
             "is_senai": true
         },
-        "235 - Auxiliar Eletricista - LM": {
-            "name": "Elétrica",
-            "approved": 22,
-            "wait": 5,
-            "days": [7],
-            "sala": "D09",
-            "dataInicio": "06/AGO (DOMINGO)",
-            "is_senai": true
-        },
-        "230 - Ajustador Soldador - LM": {
-            "name": "Ajustador soldador",
-            "approved": 25,
-            "wait": 10,
-            "days": [7],
-            "sala": "C02",
-            "dataInicio": "06/AGO (DOMINGO)",
+        "250-SG-2024-25 / INIC. PROF. (Básico)": {
+            "name": "Iniciação Profissional",
+            "approved": 55,
+            "wait": 20,
+            "days": [6],
+            "sala": "C13,D03,D06",
+            "dataInicio": "03/AGO (SÁBADO)",
             "is_senai": false
         },
-        "245 - Climatização - LM": {
-            "name": "Climatização",
+        "255-SG-2024.02 / DIGITAÇÃO": {
+            "name": "Digitação",
+            "approved": 24,
+            "wait": 10,
+            "days": [6,7],
+            "sala": "D04",
+            "dataInicio": "03/AGO (SÁBADO)",
+            "is_senai": false
+        },
+        "260-SG-2024.25 / AJUSTADOR SOLDADOR (Módulo 1)": {
+            "name": "Ajustador soldador",
             "approved": 20,
             "wait": 5,
             "days": [7],
-            "sala": "____",
-            "dataInicio": "___/AGO (_________)",
-            "is_senai": true
+            "sala": "C02",
+            "dataInicio": "04/AGO (DOMINGO)",
+            "is_senai": false
         }
     }
 }
